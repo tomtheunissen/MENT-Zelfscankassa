@@ -22,7 +22,7 @@ def init_db():
     producten = [
         ("1001", "Broodjes", "Broodje kaas", 2.50, 0.35),
         ("1002", "Warme dranken", "Koffie", 1.80, 0.10),
-        ("1003", "Koude dranken", "Cola", 2.00, 0.50)
+        ("1003", "Frisranken", "Cola", 2.00, 0.50)
     ]
     cursor.executemany("INSERT OR IGNORE INTO producten VALUES (?, ?, ?, ?, ?)", producten)
 
