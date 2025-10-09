@@ -44,3 +44,40 @@ Dit maakt het eenvoudiger voor gebruikers én zorgt ervoor dat we per categorie 
 
 ### ♻️ Overig
 - **Overige producten** – kauwgom, snacks verpakt, etc.
+
+<br><br>
+
+## 🚀 Project starten
+
+1️⃣ **Virtuele omgeving aanmaken en activeren**
+
+Maak eerst een virtuele omgeving aan om de afhankelijkheden gescheiden te houden, en activeer deze vervolgens:
+
+**Mac/Linux**
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+**Windows (Powershell)**
+```bash
+python -m venv venv
+venv\Scripts\Activate.ps1
+```
+**Windows (CMD)**
+```bash
+python -m venv venv
+venv\Scripts\activate.bat
+```
+<br>
+
+2️⃣ **Benodigde packages installeren**
+```bash
+pip install -r requirements.txt
+```
+
+<br>
+
+3️⃣ **Programma starten**
+```bash
+python -m src.main
+```
