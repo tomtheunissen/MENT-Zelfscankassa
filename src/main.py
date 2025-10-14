@@ -17,6 +17,7 @@ def main():
             totaal_prijs = info['prijs'] * info['aantal']
             regels.append(f"{info['aantal']}x {naam} - €{totaal_prijs:.2f}")
 
+        # print statement voor de winkelmand
         print(
             f"\n----------------------------------------------\n\n"
             f"**Winkelmandje**\n\nJe winkelmandje bestaat uit:\n"
