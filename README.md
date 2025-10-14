@@ -5,14 +5,14 @@ Dit project is onderdeel van de opleiding **HBO-ICT** (Blok 1) en wordt uitgevoe
 
 ---
 
-## 📋 Beschrijving
+## Beschrijving
 Het doel van dit project is om een proof-of-concept te maken van een zelfscansysteem dat:
 - producten kan scannen en prijzen optelt  
 - de CO₂-impact of productcategorie toont om duurzame keuzes te stimuleren  
 - wachtrijen in de cafetaria verkort en werkdruk voor personeel verlaagt  
 
 
-## 👨‍👩‍👦 Team
+## Team
 
 Ons projectteam bestaat uit de volgende leden:
 
@@ -24,31 +24,32 @@ Ons projectteam bestaat uit de volgende leden:
 | **Niels Theunissen** | Teamlid                     |
 
 
-## 📂 Categorieën in de productendatabase
+## Categorieën in de productendatabase
 
 Om de producten in de zelfscankassa overzichtelijk en herkenbaar te maken, zijn ze onderverdeeld in vaste categorieën.  
 Dit maakt het eenvoudiger voor gebruikers én zorgt ervoor dat we per categorie ook een gemiddelde milieuscore kunnen tonen.
 
-### 🍞 Eten
-- **Broodjes** – broodje kaas, broodje gezond, etc.
+### Eten
+- **Broodjes & Beleg** – broodje kaas, broodje gezond, etc.
 - **Snacks warm** – frikandel, kroket, kaassoufflé
 - **Snacks koud** – salades, fruit, yoghurt
 - **Maaltijden** – soep, pasta, rijstgerechten
 - **Zoet & Gebak** – koek, muffins, repen
 
-### ☕ Dranken
+### Dranken
 - **Warme dranken** – koffie, thee, chocomel
-- **Koude drankenen** – water, cola, smoothies, fruitsap
+- **Frisdranken** – cola, fanta, icetea
+- **Water & sap** – flesjes water, smoothies, fruitsap
 - **Zuivel & alternatieven** – melk, chocolademelk, havermelk
 
-### ♻️ Overig
+### Overig
 - **Overige producten** – kauwgom, snacks verpakt, etc.
 
 <br><br>
 
-## 🚀 Project starten
+## Project starten
 
-1️⃣ **Virtuele omgeving aanmaken en activeren**
+**Virtuele omgeving aanmaken en activeren**
 
 Maak eerst een virtuele omgeving aan om de afhankelijkheden gescheiden te houden, en activeer deze vervolgens:
 
@@ -69,14 +70,13 @@ venv\Scripts\activate.bat
 ```
 <br>
 
-2️⃣ **Benodigde packages installeren**
+**Benodigde packages installeren**
 ```bash
 pip install -r requirements.txt
 ```
 
 <br>
-
-3️⃣ **Programma starten**
+**Programma starten**
 ```bash
 python -m src.main
 ```
