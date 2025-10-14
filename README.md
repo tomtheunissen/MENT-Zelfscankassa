@@ -76,7 +76,9 @@ pip install -r requirements.txt
 ```
 
 <br>
+
 **Programma starten**
+
 ```bash
 python -m src.main
 ```
