@@ -2,9 +2,10 @@ from core import scan_product, calculate_total
 from database import get_product
 
 def main():
+    """de hoofdfunctie, zorgt dat gebruikers kunenn scannen, en geeft dit vervolgens allemaal weer in het winkelmandje"""
 
-    # functie om het winkelmandje te maken en printen
     def winkelmandje():
+        """functie om het winkelmandje te maken en printen"""
         overzicht = {} # dictionary om gescande producten en aantallen bij te houden
         # Ga alle gescande producten langs om aantal per product te tellen
         for product in scanned: 

@@ -1,7 +1,8 @@
 import sqlite3 # voor database
 
 def get_product(code):
-    # maak verbinding met database
+    """haalt producten op uit de database"""
+    # start verbinding met database
     conn = sqlite3.connect("data/products.db")
     cursor = conn.cursor()
 
@@ -12,7 +13,7 @@ def get_product(code):
     # beëindigt verbinding met database
     conn.close()
 
-    # geef product als dict of None wanneer er niks gevonden is
+    # geef product als dict of None wanneer niks gevonden
     if row:
         return {"naam": row[0], "prijs": row[1]}
     return None

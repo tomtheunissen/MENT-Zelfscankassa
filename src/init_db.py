@@ -1,13 +1,15 @@
 import sqlite3
 
 def init_db():
+    """functie om de database te creëeren"""
+    # start verbinding met SQLite database
     conn = sqlite3.connect("data/products.db")
     cursor = conn.cursor()
 
     # Verwijder oude tabel als die nog bestaat
     cursor.execute("DROP TABLE IF EXISTS producten")
 
-    # Maak tabel
+    # Maakt tabel
     cursor.execute("""
     CREATE TABLE producten (
         code TEXT PRIMARY KEY,
@@ -18,7 +20,7 @@ def init_db():
     )
     """)
 
-    # Voeg testproducten toe
+    # De proef database met voorbeeldproducten
     producten = [
         ("1001", "Warme dranken", "Koffie", 1.20, 2),
         ("1002", "Warme dranken", "Cappuccino", 2.20, 4),
@@ -74,13 +76,16 @@ def init_db():
         ("9005", "Zoet & gebak", "Koekje puur", 1.60, 3),
         ("9006", "Zoet & gebak", "Appeltaart", 3.20, 6)
     ]
+    # voegt de producten toe aan de databse
     cursor.executemany("INSERT OR IGNORE INTO producten VALUES (?, ?, ?, ?, ?)", producten)
 
-    conn.commit()
+    conn.commit() # slaat de wijzigingen op
 
+    # print de databse als controle
     for row in cursor.execute("SELECT * FROM producten"):
         print(row)
 
+    # beëindigt verbinding met database
     conn.close()
     print("Database aangemaakt en gevuld!")
 
