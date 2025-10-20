@@ -1,4 +1,4 @@
-from core import scan_product, calculate_total
+from core import calculate_total
 from database import get_product
 
 def main():
@@ -37,7 +37,6 @@ def main():
         code = input("Scan productcode (of 'stop'): ") # vraag productcode of "stop"
         if code == "stop":
             totaal = calculate_total(scanned) # bereken totaalprijs
-            namen = [p['naam'] for p in scanned]  # lijst met alleen namen
             winkelmandje()
             break
         product = get_product(code) # zoek product in database
