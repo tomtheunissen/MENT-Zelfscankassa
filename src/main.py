@@ -31,7 +31,7 @@ def main():
             f"**Winkelmandje**\n\nJe winkelmandje bestaat uit:\n"
             + "\n".join(regels)
             + f"\n\nTotaal: €{totaal:.2f}\n\n----------------------------------------------"
-    )
+        )
 
 
     # loop voor het scannen van producten (voor nu handmatig code invoeren)
