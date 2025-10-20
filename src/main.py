@@ -1,5 +1,8 @@
-from core import calculate_total
 from database import get_product
+
+def calculate_total(products):
+    """berekent het totaalbedrag van alle producten in de winkelmand"""
+    return sum(p["prijs"] for p in products)
 
 def main():
     """de hoofdfunctie, zorgt dat gebruikers kunenn scannen, en geeft dit vervolgens allemaal weer in het winkelmandje"""
