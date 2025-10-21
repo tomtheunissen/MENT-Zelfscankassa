@@ -30,7 +30,7 @@ Om de producten in de zelfscankassa overzichtelijk en herkenbaar te maken, zijn 
 Dit maakt het eenvoudiger voor gebruikers én zorgt ervoor dat we per categorie ook een gemiddelde milieuscore kunnen tonen.
 
 ### Eten
-- **Broodjes & Beleg** – broodje kaas, broodje gezond, etc.
+- **Broodjes** – broodje kaas, broodje gezond, etc.
 - **Snacks warm** – frikandel, kroket, kaassoufflé
 - **Snacks koud** – salades, fruit, yoghurt
 - **Maaltijden** – soep, pasta, rijstgerechten
@@ -38,9 +38,7 @@ Dit maakt het eenvoudiger voor gebruikers én zorgt ervoor dat we per categorie 
 
 ### Dranken
 - **Warme dranken** – koffie, thee, chocomel
-- **Frisdranken** – cola, fanta, icetea
-- **Water & sap** – flesjes water, smoothies, fruitsap
-- **Zuivel & alternatieven** – melk, chocolademelk, havermelk
+- **Koude dranken** – water, cola, smoothies
 
 ### Overig
 - **Overige producten** – kauwgom, snacks verpakt, etc.
