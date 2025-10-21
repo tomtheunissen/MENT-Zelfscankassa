@@ -29,16 +29,17 @@ Ons projectteam bestaat uit de volgende leden:
 Om de producten in de zelfscankassa overzichtelijk en herkenbaar te maken, zijn ze onderverdeeld in vaste categorieën.  
 Dit maakt het eenvoudiger voor gebruikers én zorgt ervoor dat we per categorie ook een gemiddelde milieuscore kunnen tonen.
 
+
+### Dranken
+- **Warme dranken** – koffie, thee, chocomel
+- **Koude dranken** – water, cola, smoothies
+
 ### Eten
 - **Broodjes** – broodje kaas, broodje gezond, etc.
 - **Snacks warm** – frikandel, kroket, kaassoufflé
 - **Snacks koud** – salades, fruit, yoghurt
 - **Maaltijden** – soep, pasta, rijstgerechten
 - **Zoet & Gebak** – koek, muffins, repen
-
-### Dranken
-- **Warme dranken** – koffie, thee, chocomel
-- **Koude dranken** – water, cola, smoothies
 
 ### Overig
 - **Overige producten** – kauwgom, snacks verpakt, etc.
