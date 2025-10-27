@@ -1,0 +1,141 @@
+<file name=src/templates/index.html><!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Zelfscankassa</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <h1>BiteWise Zelfscankassa</h1>
+
+  <form action="{{ url_for('scan') }}" method="post" class="scan-form" style="margin:20px 0">
+    <input type="text" name="code" placeholder="Scan productcode" autofocus>
+    <button type="submit">Toevoegen</button>
+  </form>
+
+  <p class="error" role="alert">{% if fout %}{{ fout }}{% endif %}</p>
+
+  <div class="cart">
+    <h2>Winkelmandje</h2>
+    <ul>
+      {% for p in producten %}
+        <li data-key="{{ p.key }}">
+          <span class="line-name">{{ p.aantal }}x {{ p.naam }} – €{{ '%.2f'|format(p.subtotaal) }}</span>
+          <span class="line-actions">
+            <button type="button" class="btn-icon minus" aria-label="Verlaag aantal" data-key="{{ p.key }}">−</button>
+            <button type="button" class="btn-icon plus" aria-label="Verhoog aantal" data-key="{{ p.key }}">+</button>
+            <button type="button" class="btn-icon remove" aria-label="Verwijder" data-key="{{ p.key }}">🗑️</button>
+          </span>
+        </li>
+      {% endfor %}
+      {% if not producten %}
+        <li>Leeg</li>
+      {% endif %}
+    </ul>
+
+    <p class="total">Totaal: €{{ '%.2f'|format(totaal) }}</p>
+
+    <form action="{{ url_for('reset') }}" method="post">
+      <button type="submit">Leeg winkelmandje</button>
+    </form>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.querySelector("form.scan-form");
+    const input = form?.querySelector("input[name='code']");
+    const cart = document.querySelector(".cart");
+    const cartList = document.querySelector(".cart ul");
+    const totalEl = document.querySelector(".total");
+    const errorEl = document.querySelector(".error");
+    const toast = document.getElementById("toast");
+
+    if (!form || !input || !cartList || !totalEl) return;
+
+    function showToast(msg, type = "info") {
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.className = `toast ${type} show`;
+      setTimeout(() => { toast.classList.remove("show"); }, 2200);
+    }
+
+    function renderList(items) {
+      cartList.innerHTML = "";
+      (items || []).forEach(p => {
+        const li = document.createElement("li");
+        const prijs = (typeof p.prijs === "number") ? p.prijs : parseFloat(p.prijs);
+        const aantal = (typeof p.aantal === "number") ? p.aantal : parseInt(p.aantal || 1, 10);
+        const subtotaal = prijs * aantal;
+        li.dataset.key = p.key || p.code || p.naam;
+        li.innerHTML = `
+          <span class="line-name">${aantal}x ${p.naam} – €${subtotaal.toFixed(2)}</span>
+          <span class="line-actions">
+            <button type="button" class="btn-icon minus" data-key="${li.dataset.key}">−</button>
+            <button type="button" class="btn-icon plus" data-key="${li.dataset.key}">+</button>
+            <button type="button" class="btn-icon remove" data-key="${li.dataset.key}">🗑️</button>
+          </span>`;
+        cartList.appendChild(li);
+      });
+      if (!items || items.length === 0) {
+        const li = document.createElement("li");
+        li.textContent = "Leeg";
+        cartList.appendChild(li);
+      }
+    }
+
+    async function postJSON(url, payload) {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      return res.json();
+    }
+
+    // Scannen zonder refresh
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const code = input.value.trim();
+      if (!code) return;
+      const data = await postJSON("/scan-json", { code });
+      errorEl.textContent = data.error ? data.error : "";
+      if (data.error) showToast(data.error, "error");
+      renderList(data.producten);
+      const totaal = (typeof data.totaal === "number") ? data.totaal : parseFloat(data.totaal || 0);
+      totalEl.textContent = `Totaal: €${totaal.toFixed(2)}`;
+      input.value = "";
+    });
+
+    // Event delegation voor +, − en prullenbak
+    cart.addEventListener("click", async (e) => {
+      const btn = e.target.closest(".btn-icon");
+      if (!btn) return;
+      const key = btn.dataset.key;
+      if (!key) return;
+
+      if (btn.classList.contains("plus")) {
+        const data = await postJSON("/update-json", { key, delta: 1 });
+        if (data.error) showToast(data.error, "error");
+        renderList(data.producten);
+        totalEl.textContent = `Totaal: €${Number(data.totaal).toFixed(2)}`;
+      } else if (btn.classList.contains("minus")) {
+        const data = await postJSON("/update-json", { key, delta: -1 });
+        if (data.error) showToast(data.error, "error");
+        renderList(data.producten);
+        totalEl.textContent = `Totaal: €${Number(data.totaal).toFixed(2)}`;
+      } else if (btn.classList.contains("remove")) {
+        const data = await postJSON("/remove-json", { key });
+        if (data.error) showToast(data.error, "error");
+        renderList(data.producten);
+        totalEl.textContent = `Totaal: €${Number(data.totaal).toFixed(2)}`;
+      }
+    });
+  });
+  </script>
+</body>
+</html>
+</file>

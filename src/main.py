@@ -1,55 +1,91 @@
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from database import get_product
 
-def calculate_total(products):
-    """berekent het totaalbedrag van alle producten in de winkelmand"""
-    return sum(p["prijs"] for p in products)
+app = Flask(__name__)
 
-def main():
-    """de hoofdfunctie, zorgt dat gebruikers kunenn scannen, en geeft dit vervolgens allemaal weer in het winkelmandje"""
+# Tijdelijk winkelmandje in geheugen
+scanned = []
 
-    def winkelmandje():
-        """functie om het winkelmandje te maken en printen"""
-        overzicht = {} # dictionary om gescande producten en aantallen bij te houden
-        # Ga alle gescande producten langs om aantal per product te tellen
-        for product in scanned: 
-            naam = product['naam'] 
-            prijs = product['prijs']
-            if naam in overzicht:
-                overzicht[naam]['aantal'] += 1
-            else:
-                overzicht[naam] = {'prijs': prijs, 'aantal': 1}
 
-        regels = []
-        # bereken totaalprijs per product en voeg regels samen voor weergave
-        for naam, info in overzicht.items():
-            totaal_prijs = info['prijs'] * info['aantal']
-            regels.append(f"{info['aantal']}x {naam} - €{totaal_prijs:.2f}")
+def calculate_total(items):
+    """Som van prijzen van alle losse gescande items"""
+    return sum(p["prijs"] for p in items)
 
-        # print statement met alle producten en totaalprijs
-        print(
-            f"\n----------------------------------------------\n\n"
-            f"**Winkelmandje**\n\nJe winkelmandje bestaat uit:\n"
-            + "\n".join(regels)
-            + f"\n\nTotaal: €{totaal:.2f}\n\n----------------------------------------------"
+
+def aggregate_cart(items):
+    """Maak geaggregeerde regels met aantal en subtotaal per product."""
+    agg = {}
+    for p in items:
+        key = p.get("code") or p.get("id") or p["naam"]
+        if key in agg:
+            agg[key]["aantal"] += 1
+            agg[key]["subtotaal"] = agg[key]["aantal"] * agg[key]["prijs"]
+        else:
+            agg[key] = {
+                "code": p.get("code"),
+                "naam": p["naam"],
+                "prijs": p["prijs"],
+                "aantal": 1,
+                "subtotaal": p["prijs"],
+            }
+    return list(agg.values())
+
+
+@app.route("/", methods=["GET"])
+def home():
+    totaal = calculate_total(scanned)
+    producten = aggregate_cart(scanned)
+    return render_template("index.html", producten=producten, totaal=totaal, fout=None)
+
+
+@app.route("/scan", methods=["POST"])
+def scan():
+    code = request.form.get("code", "").strip()
+    if not code:
+        return redirect(url_for("home"))
+
+    product = get_product(code)
+    if product:
+        scanned.append(product)
+        return redirect(url_for("home"))
+    else:
+        totaal = calculate_total(scanned)
+        producten = aggregate_cart(scanned)
+        return render_template(
+            "index.html",
+            producten=producten,
+            totaal=totaal,
+            fout="Product niet gevonden",
         )
 
 
-    # loop voor het scannen van producten (voor nu handmatig code invoeren)
-    scanned = []
-    while True:
-        code = input("Scan productcode (of 'stop'): ") # vraag productcode of "stop"
-        if code == "stop":
-            totaal = calculate_total(scanned) # bereken totaalprijs
-            winkelmandje()
-            break
-        product = get_product(code) # zoek product in database
-        if product:
-            scanned.append(product) # voegt product toe aan lijst gescande items 
-            print(f"Toegevoegd: {product['naam']} - €{product['prijs']}")
-        else:
-            print("Product niet gevonden") # foutmelding bij onbekende code
+@app.route("/reset", methods=["POST"])
+def reset():
+    scanned.clear()
+    return redirect(url_for("home"))
 
+
+@app.route("/scan-json", methods=["POST"])
+def scan_json():
+    code = (request.json or {}).get("code", "").strip()
+    if not code:
+        return jsonify({"error": "Geen code ingevoerd", "producten": aggregate_cart(scanned), "totaal": calculate_total(scanned)})
+
+    product = get_product(code)
+    if product:
+        scanned.append(product)
+        return jsonify({
+            "success": True,
+            "producten": aggregate_cart(scanned),
+            "totaal": calculate_total(scanned),
+        })
+    else:
+        return jsonify({
+            "error": "Product niet gevonden",
+            "producten": aggregate_cart(scanned),
+            "totaal": calculate_total(scanned),
+        })
 
 
 if __name__ == "__main__":
-    main()
+    app.run(debug=True)
