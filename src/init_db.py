@@ -1,11 +1,16 @@
 import sqlite3
+from pathlib import Path
 
 def init_db():
     """functie om de database te creëeren"""
-    # start verbinding met SQLite database
-    conn = sqlite3.connect("data/products.db")
-    cursor = conn.cursor()
+    # maak een pad dat werkt ongeacht waar je het script start
+    project_root = Path(__file__).resolve().parents[1]  # .../Zelfscankassa
+    db_path = project_root / "data" / "products.db"
+    db_path.parent.mkdir(parents=True, exist_ok=True)  # zorg dat /data bestaat
 
+    conn = sqlite3.connect(db_path)  # was: "data/products.db"
+    cursor = conn.cursor()
+    
     # Verwijder oude tabel als die nog bestaat
     cursor.execute("DROP TABLE IF EXISTS producten")
 
