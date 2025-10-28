@@ -38,8 +38,7 @@
         <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12" data-alt="Zuyd Hogeschool Logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBtkKa9OKPSLVpUkMbjAwkXB7BC7AwxwnvLDzr2lL0feZAV6WWLzufHZNs68jLbW9fudPxA8OMTsZx60d2qd3B4cq20FUOpnB4AiBFzuncdooikVQLxRmRP5Muh41wDzEO0_S6D1Xoh3ghXmCFiSooF2xSxDCuu7SC2MJWbSiv9AiTle1fe6z8xyGIsRec-yYEFLc61hVls0_P91Gmb9Hcs5Tv1G08XIpLlw1u54X2baAukeGAADYbz1zdW6Om6bBQp1zu2_X5JnMw");'></div>
           <div>
             <h1 class="text-xl font-bold text-gray-800 dark:text-white">Zuyd Hogeschool</h1>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Zuyd. Het begint met jou!
-            </p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Welcome to the Self-Checkout</p>
           </div>
       </div>
     <!-- Search Bar -->
@@ -49,8 +48,7 @@
           <div class="text-gray-500 dark:text-gray-400 flex border-none bg-background-light dark:bg-zinc-800 items-center justify-center pl-4 rounded-l-lg border-r-0">
             <span class="material-symbols-outlined">qr_code_scanner</span>
           </div>
-          <input type="text" name="code" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-gray-800 dark:text-white focus:outline-0 focus:ring-0 border-none bg-background-light dark:bg-zinc-800 h-full placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 text-base font-normal" placeholder="Scan your item's barcode here" value=""/>
-          <button type="submit">Toevoegen</button>
+          <input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-gray-800 dark:text-white focus:outline-0 focus:ring-0 border-none bg-background-light dark:bg-zinc-800 h-full placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 text-base font-normal" placeholder="Scan your item's barcode here" value=""/>
         </div>
       </label>
     </div>
@@ -125,7 +123,7 @@
 
   <!-- Right Side: Cart Summary -->
   <div class="flex flex-col w-2/5 bg-background-light dark:bg-zinc-800 p-6">
-    <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Winkelwagen</h2>
+    <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Your Order</h2>
     <div class="flex-grow overflow-y-auto space-y-4 pr-2">
       <!-- Cart Item -->
       <div class="flex items-center gap-4 bg-white dark:bg-zinc-900 p-3 rounded-lg">
@@ -162,9 +160,18 @@
     </div>
     <!-- Price Summary & Actions -->
     <div class="mt-auto pt-6 border-t border-gray-200 dark:border-gray-700">
+      <div class="space-y-2 text-gray-800 dark:text-white">
+        <div class="flex justify-between">
+          <p class="text-gray-500 dark:text-gray-400">Subtotal</p>
+          <p class="font-medium">€6.50</p>
+        </div>
+        <div class="flex justify-between">
+          <p class="text-gray-500 dark:text-gray-400">Tax (9%)</p>
+          <p class="font-medium">€0.59</p>
+        </div>
         <div class="flex justify-between text-xl font-bold">
-          <p>Totaal</p>
-          <p>€{{ '%.2f'|format(totaal) }}</p>
+          <p>Total</p>
+          <p>€7.09</p>
         </div>
       </div>
       <div class="mt-6 flex flex-col gap-4">
