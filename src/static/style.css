@@ -7,3 +7,32 @@ material-symbols-outlined {
 }
 
 .logo { background-image: url("/static/img/ui/zuyd_logo.png") }
+
+[type=submit].toevoegen{
+  padding: 12px 24px 12px 24px;
+  margin-left: -10px;
+  border-radius: 8px;
+  background-color: #f6f7f8;
+  font-weight: 500;
+}
+
+[type=submit].toevoegen:hover{
+  background-color: #e2e4e6;
+}
+
+[type=submit].toevoegen:after{
+  background-color: #e2e4e6;
+}
+
+.knop-afbreken{
+  padding: 10px 20px 10px 20px;
+  border-radius: 8px;
+  background-color: #e5e7eb;
+  color: #1f2937;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.knop-afbreken:hover{
+  background-color: #d1d5db;
+}

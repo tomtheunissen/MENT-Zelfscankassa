@@ -52,7 +52,7 @@
               <span class="material-symbols-outlined">qr_code_scanner</span>
             </div>
             <input type="text" name="code" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-gray-800 dark:text-white focus:outline-0 focus:ring-0 border-none bg-background-light dark:bg-zinc-800 h-full placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 text-base font-normal" placeholder="Scan your item's barcode here" value=""/>
-            <button type="submit" class="px-4">Toevoegen</button>
+            <button type="submit" class="toevoegen">Toevoegen</button>
           </div>
         </label>
       </form>
@@ -140,7 +140,12 @@
 
   <!-- Right Side: Cart Summary -->
   <div class="flex flex-col w-2/5 bg-background-light dark:bg-zinc-800 p-6">
-    <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Winkelwagen</h2>
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Winkelwagen</h2>
+      <form action="{{ url_for('reset') }}" method="post">
+        <button class="knop-afbreken" href="{{ url_for('reset') }}">Afbreken</button>
+      </form>
+    </div>
     <div class="flex-grow overflow-y-auto space-y-4 pr-2">
       <!-- Cart Item -->
       <div class="flex items-center gap-4 bg-white dark:bg-zinc-900 p-3 rounded-lg">
