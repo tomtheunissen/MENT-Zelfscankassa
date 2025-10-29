@@ -45,9 +45,15 @@ def home():
     return render_template("index.html", producten=producten, totaal=totaal, fout=None)
 
 
-@app.route("/scan", methods=["POST"])
-def scan():
-    code = request.form.get("code", "").strip()
+@app.route("/scan", methods=["GET", "POST"]) 
+@app.route("/scan/<code>", methods=["GET"]) 
+def scan(code=None):
+    # Bepaal code uit POST-body of uit de URL-parameter
+    if request.method == "POST" and code is None:
+        code = request.form.get("code", "").strip()
+    elif code is not None:
+        code = str(code).strip()
+
     if not code:
         return redirect(url_for("home"))
 

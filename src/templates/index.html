@@ -1,4 +1,4 @@
-<file name=src/templates/index.html><!DOCTYPE html>
+<!DOCTYPE html>
 
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
@@ -45,15 +45,17 @@
       </div>
     <!-- Search Bar -->
     <div class="mb-6">
-      <label class="flex flex-col min-w-40 h-12 w-full">
-        <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
-          <div class="text-gray-500 dark:text-gray-400 flex border-none bg-background-light dark:bg-zinc-800 items-center justify-center pl-4 rounded-l-lg border-r-0">
-            <span class="material-symbols-outlined">qr_code_scanner</span>
+      <form action="{{ url_for('scan') }}" method="post" class="scan-form">
+        <label class="flex flex-col min-w-40 h-12 w-full">
+          <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+            <div class="text-gray-500 dark:text-gray-400 flex border-none bg-background-light dark:bg-zinc-800 items-center justify-center pl-4 rounded-l-lg border-r-0">
+              <span class="material-symbols-outlined">qr_code_scanner</span>
+            </div>
+            <input type="text" name="code" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-gray-800 dark:text-white focus:outline-0 focus:ring-0 border-none bg-background-light dark:bg-zinc-800 h-full placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 text-base font-normal" placeholder="Scan your item's barcode here" value=""/>
+            <button type="submit" class="px-4">Toevoegen</button>
           </div>
-          <input type="text" name="code" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-gray-800 dark:text-white focus:outline-0 focus:ring-0 border-none bg-background-light dark:bg-zinc-800 h-full placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 text-base font-normal" placeholder="Scan your item's barcode here" value=""/>
-          <button type="submit">Toevoegen</button>
-        </div>
-      </label>
+        </label>
+      </form>
     </div>
     <!-- Category Navigation -->
     <div class="flex border-b border-gray-200 dark:border-gray-700 mb-4">
@@ -77,48 +79,60 @@
     <!-- Item Grid -->
     <div class="flex-grow overflow-y-auto pr-2">
       <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
-        <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
-          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg" data-alt="Broodje Tonijn" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCAMt8xPqy_ZiOL9sToCT5QKt-1bno7MtUTW35vfSrlbFhE3lbwpv-sFJABOuDxlZLxXE2FW_216dt1LyC2kBPbx-EL4SRzuBacKK5Bc6Joe2TJCp0XWYuoc7lixBgGe-tlxsQXKWFtB5DBKv5oMqOMPzDgfA8aXMqnCjKzn1xf5_5QU51V1tQ0LsOrKCzDlOA8zslv57n9RzEWPz8IPjQYVRWT7APcndCZ85q3X3pZFvyUeRkRlMsHSrYa8p59PCq2uBE7i6Mm9hg");'></div>
-          <div>
-             <p class="text-base font-medium text-gray-800 dark:text-white">Broodje Tonijn</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400">€4,10</p>
+        <a href="{{ url_for('scan', code=5008) }}" class="block">
+          <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
+            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg" data-alt="Broodje Tonijn" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCAMt8xPqy_ZiOL9sToCT5QKt-1bno7MtUTW35vfSrlbFhE3lbwpv-sFJABOuDxlZLxXE2FW_216dt1LyC2kBPbx-EL4SRzuBacKK5Bc6Joe2TJCp0XWYuoc7lixBgGe-tlxsQXKWFtB5DBKv5oMqOMPzDgfA8aXMqnCjKzn1xf5_5QU51V1tQ0LsOrKCzDlOA8zslv57n9RzEWPz8IPjQYVRWT7APcndCZ85q3X3pZFvyUeRkRlMsHSrYa8p59PCq2uBE7i6Mm9hg");'></div>
+            <div>
+               <p class="text-base font-medium text-gray-800 dark:text-white">Broodje Tonijn</p>
+               <p class="text-sm text-gray-500 dark:text-gray-400">€4,10</p>
+            </div>
           </div>
-        </div>
-        <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
-          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg" data-alt="Broodje Ham &amp; Kaas" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB2BoNgu533vlcoHMtCQ834wBwEVXFdX8IzWaFd4OAasdAkScwJps7uHiPyGYesswhEh4-L7scsL6_uLLqrwrcgIxxYRtphwpQBh7Vm1RlRWjN-VTVZ1NBdwf2YRXZyN03AqOacHBOgOcnmRC0Tn040uSsvuXQA9mu3eYDg1YatMhQgHdAte7JxHZztcLpcSgKjn8XPQPcHbzM4o1iPU-HnjcgsX4JjxA3ldbv_c76J7qdK-MbpgPeQBvq_qnX4M8jJuNat8O7Kn90");'></div>
-          <div>
-            <p class="text-base font-medium text-gray-800 dark:text-white">Broodje Ham &amp; Kaas</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400">€3,70</p>
+        </a>
+        <a href="{{ url_for('scan', code=5003) }}" class="block">
+          <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
+            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg" data-alt="Broodje Ham &amp; Kaas" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB2BoNgu533vlcoHMtCQ834wBwEVXFdX8IzWaFd4OAasdAkScwJps7uHiPyGYesswhEh4-L7scsL6_uLLqrwrcgIxxYRtphwpQBh7Vm1RlRWjN-VTVZ1NBdwf2YRXZyN03AqOacHBOgOcnmRC0Tn040uSsvuXQA9mu3eYDg1YatMhQgHdAte7JxHZztcLpcSgKjn8XPQPcHbzM4o1iPU-HnjcgsX4JjxA3ldbv_c76J7qdK-MbpgPeQBvq_qnX4M8jJuNat8O7Kn90");'></div>
+            <div>
+              <p class="text-base font-medium text-gray-800 dark:text-white">Broodje Ham &amp; Kaas</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">€3,70</p>
+            </div>
           </div>
-        </div>
-        <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
-          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg" data-alt="Broodje BLT" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDAQ220poG-LLPIYinbQjx5U_91en7CzsKLtD5jCNzLgoE6231G4_yM4vV-AWSxn4aRLRgdGgrI9IezN4h_uoH-aBkGVG18Hq08iqgKEIfQbcn5BWtohthVrtblrbuRVoBstzWQe8l2k-_A909KdICSxx-I7eqjmlaErcU7KZZucRuuiRYYmOqVZzTSaeXBlSxTd6f9AXnm98yA3_1psRyyrj1_fiZdvy1hN0AqNRB3oB2iwzwAIHqOOxDfx2Lx3wv1pZ5XtQF1Ms4");'></div>
-          <div>
-            <p class="text-base font-medium text-gray-800 dark:text-white">Broodje BLT</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400">€4,50</p>
+        </a>
+        <a href="{{ url_for('scan', code=5010) }}" class="block">
+          <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
+            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg" data-alt="Broodje BLT" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDAQ220poG-LLPIYinbQjx5U_91en7CzsKLtD5jCNzLgoE6231G4_yM4vV-AWSxn4aRLRgdGgrI9IezN4h_uoH-aBkGVG18Hq08iqgKEIfQbcn5BWtohthVrtblrbuRVoBstzWQe8l2k-_A909KdICSxx-I7eqjmlaErcU7KZZucRuuiRYYmOqVZzTSaeXBlSxTd6f9AXnm98yA3_1psRyyrj1_fiZdvy1hN0AqNRB3oB2iwzwAIHqOOxDfx2Lx3wv1pZ5XtQF1Ms4");'></div>
+            <div>
+              <p class="text-base font-medium text-gray-800 dark:text-white">Broodje BLT</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">€4,50</p>
+            </div>
           </div>
-        </div>
-        <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
-          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg" data-alt="Broodje Gezond" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD4EpsTwwbtmE1wGjjqn6ZnIO7ziYbKUIzkhkZ9DH5f3nkqbBVD3et390_xjG38M_GUQUn0HQliqQzaJ8UXNTTi6EsBzUpa08t7FVMvxvG_bAkt5hzSXuOBQtOYBTctyNrJ1gE1yj8CcRiDPu7EdYl-2r2rSzu36JIoy0tf7xYttrBeiBDHk8fD2zhL1yH6P9lETXf95xE2y486ZNB0KOelo8j2t9isETR_vE18AsaTekg4A-iwj1ibKZ3SpKuuTW8bn0sKZocVKNM");'></div>
-          <div>
-            <p class="text-base font-medium text-gray-800 dark:text-white">Broodje Gezond</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400">€4,00</p>
+        </a>
+        <a href="{{ url_for('scan', code=5004) }}" class="block">
+          <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
+            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg" data-alt="Broodje Gezond" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD4EpsTwwbtmE1wGjjqn6ZnIO7ziYbKUIzkhkZ9DH5f3nkqbBVD3et390_xjG38M_GUQUn0HQliqQzaJ8UXNTTi6EsBzUpa08t7FVMvxvG_bAkt5hzSXuOBQtOYBTctyNrJ1gE1yj8CcRiDPu7EdYl-2r2rSzu36JIoy0tf7xYttrBeiBDHk8fD2zhL1yH6P9lETXf95xE2y486ZNB0KOelo8j2t9isETR_vE18AsaTekg4A-iwj1ibKZ3SpKuuTW8bn0sKZocVKNM");'></div>
+            <div>
+              <p class="text-base font-medium text-gray-800 dark:text-white">Broodje Gezond</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">€4,00</p>
+            </div>
           </div>
-        </div>
-        <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
-          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg" data-alt="Broodje Kip Krokant" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDncd5us0jOWmfQhcsmiF2CMW5hlm1Q9LBc-_zL0us-Ju6GhbbqnaWQ6yGafHlW0jkOOmP6-pq8GPpoYWC6SjEJGscOi8NE383JuesL1C-onjdf_wq-o4ZM9YjJZ__mH0dVh6pZOJr3dJfbGItZTaQhLWx9HBLYn7tdwEMEKbjRm1nFZIV_Mab2xupAH_OJtcwxo5KXaqNd8Lkc4vxSLc7iLuA-d48ZgKR13xJ53TyCdEobRYhGmmV2J5cDio2vIfOxUtRWXL14gdw");'></div>
-          <div>
-            <p class="text-base font-medium text-gray-800 dark:text-white">Broodje Kip Krokant</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400">€4,00</p>
+        </a>
+        <a href="{{ url_for('scan', code=5009) }}" class="block">
+          <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
+            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg" data-alt="Broodje Kip Krokant" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDncd5us0jOWmfQhcsmiF2CMW5hlm1Q9LBc-_zL0us-Ju6GhbbqnaWQ6yGafHlW0jkOOmP6-pq8GPpoYWC6SjEJGscOi8NE383JuesL1C-onjdf_wq-o4ZM9YjJZ__mH0dVh6pZOJr3dJfbGItZTaQhLWx9HBLYn7tdwEMEKbjRm1nFZIV_Mab2xupAH_OJtcwxo5KXaqNd8Lkc4vxSLc7iLuA-d48ZgKR13xJ53TyCdEobRYhGmmV2J5cDio2vIfOxUtRWXL14gdw");'></div>
+            <div>
+              <p class="text-base font-medium text-gray-800 dark:text-white">Broodje Kip Krokant</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">€4,00</p>
+            </div>
           </div>
-        </div>
-        <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
-          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg" data-alt="Broodje Eiersalade" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA2OAO-qAr2GOmvHvojNV1AkYtU_IwFY1JGKN1lBkv014-EkzeTHPCAga6pqXvE-q6IbJW7imXFpmwBJf30a4WqffM0XjRd5I1_Be3_jW90-qOjW6UB8VRXgss8C1bwkXLOjIfPl4klkzcDPIO_DIG116S_PWgjzpg1tVcNrh0u2l73GLQqrPKFeK3ZdmIFmJm4phrkpRD7GFGQ1gFhWNZJIuCAN0UMVpViIyaRn2OmuTPt-cTQen8GiT6k86OJm0Vr-_2WfTRwylc");'></div>
-          <div>
-            <p class="text-base font-medium text-gray-800 dark:text-white">Broodje Eiersalade</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400">€3,60</p>
+        </a>
+        <a href="{{ url_for('scan', code=5011) }}" class="block">
+          <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
+            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg" data-alt="Broodje Eiersalade" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA2OAO-qAr2GOmvHvojNV1AkYtU_IwFY1JGKN1lBkv014-EkzeTHPCAga6pqXvE-q6IbJW7imXFpmwBJf30a4WqffM0XjRd5I1_Be3_jW90-qOjW6UB8VRXgss8C1bwkXLOjIfPl4klkzcDPIO_DIG116S_PWgjzpg1tVcNrh0u2l73GLQqrPKFeK3ZdmIFmJm4phrkpRD7GFGQ1gFhWNZJIuCAN0UMVpViIyaRn2OmuTPt-cTQen8GiT6k86OJm0Vr-_2WfTRwylc");'></div>
+            <div>
+              <p class="text-base font-medium text-gray-800 dark:text-white">Broodje Eiersalade</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">€3,60</p>
+            </div>
           </div>
-        </div>
+        </a>
       </div>
     </div>
   </div>
@@ -181,4 +195,3 @@
 </div>
 </body>
 </html>
-</file>
