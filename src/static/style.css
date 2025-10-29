@@ -36,3 +36,9 @@ material-symbols-outlined {
 .knop-afbreken:hover{
   background-color: #d1d5db;
 }
+
+.lijst-gescand {
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: 100px;
+}

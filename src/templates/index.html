@@ -148,6 +148,31 @@
     </div>
     <div class="flex-grow overflow-y-auto space-y-4 pr-2">
       <!-- Cart Item -->
+        <ul class="space-y-4">
+          {% for p in producten %}
+            <li data-key="{{ p.key }}" class="lijst-gescand">
+              <div class="flex items-center gap-4 bg-white dark:bg-zinc-900 p-3 rounded-lg">
+                <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16" data-alt="Broodje Tonijn" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBW9AqUuipuxEh9m36Va5bWDuzqx8r8HL4iMaQFF7yck1buye73-Ko5O2a7ZJsfoK4AyhiKnRZitOMNoxp7gB2eastCvMGIhY0u2P-xV58wuP9uv9Z9lB8IvSVYLpGJaySQ0lL-FI4Rwzphu6OoC9zxJldSOEs_Bc8fRVBO8Ld-6NNZSsRb4fSRSeIm01BXjEFxLBhc_0-fmid9JU7vJx_bH5hY1fIGgReCM6ULbwXLOYmQByWB7tJA42wQ12qe-_UPCBGDsdokgb4");'></div>
+                <div class="flex-grow">
+                  <p class="text-base font-medium text-gray-800 dark:text-white">{{ p.naam }}</p>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">€{{ '%.2f'|format(p.subtotaal) }}</p>
+                </div>
+                <div class="flex items-center gap-2 text-gray-800 dark:text-white">
+                  <button class="text-lg font-medium flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600">-</button>
+                  <input class="text-base font-medium w-6 p-0 text-center bg-transparent focus:outline-none border-none" type="number" value="{{ p.aantal }}"/>
+                  <button class="text-lg font-medium flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600">+</button>
+                </div>
+                <button class="text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 ml-2">
+                  <span class="material-symbols-outlined">delete</span>
+                </button>
+              </div>
+              </li>
+          {% endfor %}
+          {% if not producten %}
+            <li></li>
+          {% endif %}
+        </ul>
+
       <div class="flex items-center gap-4 bg-white dark:bg-zinc-900 p-3 rounded-lg">
         <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16" data-alt="Broodje Tonijn" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBW9AqUuipuxEh9m36Va5bWDuzqx8r8HL4iMaQFF7yck1buye73-Ko5O2a7ZJsfoK4AyhiKnRZitOMNoxp7gB2eastCvMGIhY0u2P-xV58wuP9uv9Z9lB8IvSVYLpGJaySQ0lL-FI4Rwzphu6OoC9zxJldSOEs_Bc8fRVBO8Ld-6NNZSsRb4fSRSeIm01BXjEFxLBhc_0-fmid9JU7vJx_bH5hY1fIGgReCM6ULbwXLOYmQByWB7tJA42wQ12qe-_UPCBGDsdokgb4");'></div>
         <div class="flex-grow">
