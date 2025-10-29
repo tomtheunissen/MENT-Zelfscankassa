@@ -5,3 +5,5 @@ material-symbols-outlined {
   'GRAD' 0,
   'opsz' 24
 }
+
+.logo { background-image: url("/static/img/ui/zuyd_logo.png") }

@@ -6,6 +6,7 @@
 <title>Zuyd Hogeschool Self-Checkout</title>
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script>
       tailwind.config = {
@@ -35,7 +36,7 @@
   <div class="flex flex-col w-3/5 bg-white dark:bg-background-dark p-6">
     <!-- Header -->
       <div class="flex items-center gap-3 mb-6">
-        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12" data-alt="Zuyd Hogeschool Logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBtkKa9OKPSLVpUkMbjAwkXB7BC7AwxwnvLDzr2lL0feZAV6WWLzufHZNs68jLbW9fudPxA8OMTsZx60d2qd3B4cq20FUOpnB4AiBFzuncdooikVQLxRmRP5Muh41wDzEO0_S6D1Xoh3ghXmCFiSooF2xSxDCuu7SC2MJWbSiv9AiTle1fe6z8xyGIsRec-yYEFLc61hVls0_P91Gmb9Hcs5Tv1G08XIpLlw1u54X2baAukeGAADYbz1zdW6Om6bBQp1zu2_X5JnMw");'></div>
+        <div class="bg-center bg-no-repeat aspect-square bg-cover size-12 logo" data-alt="Zuyd Hogeschool Logo"></div>
           <div>
             <h1 class="text-xl font-bold text-gray-800 dark:text-white">Zuyd Hogeschool</h1>
             <p class="text-sm text-gray-500 dark:text-gray-400">Zuyd. Het begint met jou!
