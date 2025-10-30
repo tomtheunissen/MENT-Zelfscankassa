@@ -139,7 +139,7 @@
 
 
   <!-- Right Side: Cart Summary -->
-  <div class="flex flex-col w-2/5 bg-background-light dark:bg-zinc-800 p-6">
+  <div class="cart flex flex-col w-2/5 bg-background-light dark:bg-zinc-800 p-6">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Winkelwagen</h2>
       <form action="{{ url_for('reset') }}" method="post">
@@ -147,8 +147,7 @@
       </form>
     </div>
     <div class="flex-grow overflow-y-auto space-y-4 pr-2">
-      <!-- Cart Item -->
-        <ul class="space-y-4">
+        <ul>
           {% for p in producten %}
             <li data-key="{{ p.key }}" class="lijst-gescand">
               <div class="flex items-center gap-4 bg-white dark:bg-zinc-900 p-3 rounded-lg">
@@ -157,12 +156,12 @@
                   <p class="text-base font-medium text-gray-800 dark:text-white">{{ p.naam }}</p>
                   <p class="text-sm text-gray-500 dark:text-gray-400">€{{ '%.2f'|format(p.subtotaal) }}</p>
                 </div>
-                <div class="flex items-center gap-2 text-gray-800 dark:text-white">
-                  <button class="text-lg font-medium flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600">-</button>
-                  <input class="text-base font-medium w-6 p-0 text-center bg-transparent focus:outline-none border-none" type="number" value="{{ p.aantal }}"/>
-                  <button class="text-lg font-medium flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600">+</button>
+                <div class="line-actions flex items-center gap-2 text-gray-800 dark:text-white">
+                  <button type="button" data-key="{{ p.key }}" class="btn-icon minus text-lg font-medium flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600">-</button>
+                  <p class="text-base font-medium w-10 p-0 text-center bg-transparent tabular-nums"> {{ p.aantal }} </p>
+                  <button type="button" data-key="{{ p.key }}" class="btn-icon plus text-lg font-medium flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600">+</button>
                 </div>
-                <button class="text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 ml-2">
+                <button type="button" data-key="{{ p.key }}" class="btn-icon remove text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 ml-2">
                   <span class="material-symbols-outlined">delete</span>
                 </button>
               </div>
@@ -172,44 +171,13 @@
             <li></li>
           {% endif %}
         </ul>
-
-      <div class="flex items-center gap-4 bg-white dark:bg-zinc-900 p-3 rounded-lg">
-        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16" data-alt="Broodje Tonijn" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBW9AqUuipuxEh9m36Va5bWDuzqx8r8HL4iMaQFF7yck1buye73-Ko5O2a7ZJsfoK4AyhiKnRZitOMNoxp7gB2eastCvMGIhY0u2P-xV58wuP9uv9Z9lB8IvSVYLpGJaySQ0lL-FI4Rwzphu6OoC9zxJldSOEs_Bc8fRVBO8Ld-6NNZSsRb4fSRSeIm01BXjEFxLBhc_0-fmid9JU7vJx_bH5hY1fIGgReCM6ULbwXLOYmQByWB7tJA42wQ12qe-_UPCBGDsdokgb4");'></div>
-        <div class="flex-grow">
-          <p class="text-base font-medium text-gray-800 dark:text-white">Broodje Tonijn</p>
-          <p class="text-sm text-gray-500 dark:text-gray-400">€4,10</p>
-        </div>
-        <div class="flex items-center gap-2 text-gray-800 dark:text-white">
-          <button class="text-lg font-medium flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600">-</button>
-          <input class="text-base font-medium w-6 p-0 text-center bg-transparent focus:outline-none border-none" type="number" value="1"/>
-          <button class="text-lg font-medium flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600">+</button>
-        </div>
-        <button class="text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 ml-2">
-          <span class="material-symbols-outlined">delete</span>
-        </button>
-      </div>
       <!-- Cart Item -->
-      <div class="flex items-center gap-4 bg-white dark:bg-zinc-900 p-3 rounded-lg">
-        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16" data-alt="Coca-Cola can" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCLqDJSxzFzhJIb-sqKirZeKNZhWLQUKxyotNiGvKHj8rYOQNi9OP7yzJu8yUJlMjO3h3U4nxKjxIKPkciJUvTXYqAQJ1z8USEc2Q8Apw10V4g7d1s9IvqOcE0buU5y6OfEq0lvG5dNGOCWUHfaMflxdkQceM3Cu8JZJ6EWisCeJNS4z0WqROT42-C182kzW9O83mUnhPEZJScrDgZJX4Sw9uQHiD6IBZwXgUt6Kq5JCPoxgWYZeBn6CfGtSYkDxbHYByb4IfCxPYg");'></div>
-        <div class="flex-grow">
-          <p class="text-base font-medium text-gray-800 dark:text-white">Coca-Cola</p>
-          <p class="text-sm text-gray-500 dark:text-gray-400">€2,00</p>
-        </div>
-        <div class="flex items-center gap-2 text-gray-800 dark:text-white">
-          <button class="text-lg font-medium flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600">-</button>
-          <input class="text-base font-medium w-6 p-0 text-center bg-transparent focus:outline-none border-none" type="number" value="2"/>
-          <button class="text-lg font-medium flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600">+</button>
-        </div>
-        <button class="text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 ml-2">
-          <span class="material-symbols-outlined">delete</span>
-        </button>
-      </div>
     </div>
     <!-- Price Summary & Actions -->
     <div class="mt-auto pt-6 border-t border-gray-200 dark:border-gray-700">
         <div class="flex justify-between text-xl font-bold">
           <p>Totaal</p>
-          <p>€{{ '%.2f'|format(totaal) }}</p>
+          <p class="total">Totaal: €{{ '%.2f'|format(totaal) }}</p>
         </div>
       </div>
       <div class="mt-6 flex flex-col gap-4">
@@ -223,5 +191,127 @@
     </div>
   </div>
 </div>
+
+  <p class="error" role="alert">{% if fout %}{{ fout }}{% endif %}</p>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.querySelector("form.scan-form");
+    const input = form?.querySelector("input[name='code']");
+    const cart = document.querySelector(".cart");
+    const cartList = document.querySelector(".cart ul");
+    const totalEl = document.querySelector(".total");
+    const errorEl = document.querySelector(".error");
+    const toast = document.getElementById("toast");
+
+    if (!form || !input || !cartList || !totalEl) return;
+
+    function showToast(msg, type = "info") {
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.className = `toast ${type} show`;
+      setTimeout(() => { toast.classList.remove("show"); }, 2200);
+    }
+
+    function renderList(items) {
+      // 1) Bewaar huidige images per key voordat we de lijst leegmaken
+      const imgByKey = {};
+      cartList.querySelectorAll('li[data-key]').forEach(li => {
+        const key = li.getAttribute('data-key');
+        const bg = li.querySelector('.bg-cover');
+        if (key && bg) imgByKey[key] = bg.style.backgroundImage || '';
+      });
+
+      // 2) Herbouw de lijst met kaart-layout
+      cartList.innerHTML = '';
+      (items || []).forEach(p => {
+        const li = document.createElement('li');
+        const prijs = (typeof p.prijs === 'number') ? p.prijs : parseFloat(p.prijs);
+        const aantal = (typeof p.aantal === 'number') ? p.aantal : parseInt(p.aantal || 1, 10);
+        const key = p.key || p.code || p.naam;
+        const subtotaal = prijs * aantal;
+        // gebruik p.image als beschikbaar; anders de eerder gebruikte bg-image; anders leeg
+        const imageStyle = (p.image ? `url('${p.image}')` : (imgByKey[key] || ''));
+
+        li.dataset.key = key;
+        li.dataset.price = String(prijs);
+        li.className = 'lijst-gescand';
+        li.innerHTML = `
+          <div class="flex items-center gap-4 bg-white dark:bg-zinc-900 p-3 rounded-lg">
+            <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16" data-alt="${p.naam}" style="background-image: ${imageStyle};"></div>
+            <div class="flex-grow min-w-0">
+              <p class="text-base font-medium text-gray-800 dark:text-white truncate">${p.naam}</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">€${subtotaal.toFixed(2)}</p>
+            </div>
+            <div class="flex items-center gap-2 text-gray-800 dark:text-white">
+              <button type="button" class="btn-icon minus text-lg font-medium flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600" data-key="${key}" aria-label="Verlaag aantal">-</button>
+              <input class="aantal-input text-base font-medium w-6 p-0 text-center bg-transparent focus:outline-none border-none" type="number" value="${aantal}" readonly/>
+              <button type="button" class="btn-icon plus text-lg font-medium flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600" data-key="${key}" aria-label="Verhoog aantal">+</button>
+            </div>
+            <button type="button" class="btn-icon remove text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 ml-2" data-key="${key}" aria-label="Verwijder">
+              <span class="material-symbols-outlined">delete</span>
+            </button>
+          </div>`;
+        cartList.appendChild(li);
+      });
+
+      if (!items || items.length === 0) {
+        const li = document.createElement('li');
+        li.textContent = 'Leeg';
+        cartList.appendChild(li);
+      }
+    }
+
+    async function postJSON(url, payload) {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      return res.json();
+    }
+
+    // Scannen zonder refresh
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const code = input.value.trim();
+      if (!code) return;
+      const data = await postJSON("/scan-json", { code });
+      errorEl.textContent = data.error ? data.error : "";
+      if (data.error) showToast(data.error, "error");
+      renderList(data.producten);
+      const totaal = (typeof data.totaal === "number") ? data.totaal : parseFloat(data.totaal || 0);
+      totalEl.textContent = `Totaal: €${totaal.toFixed(2)}`;
+      input.value = "";
+    });
+
+    // Event delegation voor +, − en prullenbak
+    cart.addEventListener("click", async (e) => {
+      const btn = e.target.closest(".btn-icon");
+      if (!btn) return;
+      const key = btn.dataset.key;
+      if (!key) return;
+
+      if (btn.classList.contains("plus")) {
+        const data = await postJSON("/update-json", { key, delta: 1 });
+        if (data.error) showToast(data.error, "error");
+        renderList(data.producten);
+        totalEl.textContent = `Totaal: €${Number(data.totaal).toFixed(2)}`;
+      } else if (btn.classList.contains("minus")) {
+        const data = await postJSON("/update-json", { key, delta: -1 });
+        if (data.error) showToast(data.error, "error");
+        renderList(data.producten);
+        totalEl.textContent = `Totaal: €${Number(data.totaal).toFixed(2)}`;
+      } else if (btn.classList.contains("remove")) {
+        const data = await postJSON("/remove-json", { key });
+        if (data.error) showToast(data.error, "error");
+        renderList(data.producten);
+        totalEl.textContent = `Totaal: €${Number(data.totaal).toFixed(2)}`;
+      }
+    });
+  });
+  </script>
+
 </body>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 </html>
