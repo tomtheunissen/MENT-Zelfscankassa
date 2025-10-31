@@ -27,6 +27,7 @@
         },
       }
 </script>
+<script src="https://unpkg.com/htmx.org@1.9.10"></script>
 </head>
 
 
@@ -45,7 +46,7 @@
       </div>
     <!-- Search Bar -->
     <div class="mb-6">
-      <form action="{{ url_for('scan') }}" method="post" class="scan-form">
+      <form hx-post="{{ url_for('scan') }}" hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" class="scan-form" hx-on::after-request="this.reset(); scrollCartToBottom();" hx-on::after-swap="scrollCartToBottom()">
         <label class="flex flex-col min-w-40 h-12 w-full">
           <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
             <div class="text-gray-500 dark:text-gray-400 flex border-none bg-background-light dark:bg-zinc-800 items-center justify-center pl-4 rounded-l-lg border-r-0">
@@ -81,11 +82,11 @@
       </button>
     </div>
 
-<div id="broodjes" class="tab-content hidden">
+<div id="broodjes" class="tab-content">
   <div class="flex-grow overflow-y-auto pr-2">
     <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
       {% for p in broodjes %}
-        <a href="{{ url_for('scan', code=p.code) }}" class="block">
+        <a hx-post="{{ url_for('scan') }}" hx-vals='{"code":"{{ p.code }}"}' hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" hx-on::after-swap="scrollCartToBottom()" class="block">
           <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
             <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg"
                  style="background-image: url('{{ p.afbeelding_url }}')"></div>
@@ -104,7 +105,7 @@
   <div class="flex-grow overflow-y-auto pr-2">
     <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
       {% for p in dranken %}
-        <a href="{{ url_for('scan', code=p.code) }}" class="block">
+        <a hx-post="{{ url_for('scan') }}" hx-vals='{"code":"{{ p.code }}"}' hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" hx-on::after-swap="scrollCartToBottom()" class="block">
           <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
             <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg"
                  style="background-image: url('{{ p.afbeelding_url }}')"></div>
@@ -123,7 +124,7 @@
   <div class="flex-grow overflow-y-auto pr-2">
     <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
       {% for p in snacks %}
-        <a href="{{ url_for('scan', code=p.code) }}" class="block">
+        <a hx-post="{{ url_for('scan') }}" hx-vals='{"code":"{{ p.code }}"}' hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" hx-on::after-swap="scrollCartToBottom()" class="block">
           <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
             <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg"
                  style="background-image: url('{{ p.afbeelding_url }}')"></div>
@@ -142,7 +143,7 @@
   <div class="flex-grow overflow-y-auto pr-2">
     <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
       {% for p in overige %}
-        <a href="{{ url_for('scan', code=p.code) }}" class="block">
+        <a hx-post="{{ url_for('scan') }}" hx-vals='{"code":"{{ p.code }}"}' hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" hx-on::after-swap="scrollCartToBottom()" class="block">
           <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
             <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg"
                  style="background-image: url('{{ p.afbeelding_url }}')"></div>
@@ -172,32 +173,32 @@
   <div class="cart flex flex-col w-2/5 bg-background-light dark:bg-zinc-800 p-6">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Winkelwagen</h2>
-      <form action="{{ url_for('reset') }}" method="post">
+        <form hx-post="{{ url_for('reset') }}" hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" hx-on::after-swap="scrollCartToBottom()">
         <button class="knop-afbreken" href="{{ url_for('reset') }}">Afbreken</button>
       </form>
     </div>
-    <div class="flex-grow overflow-y-auto space-y-4 pr-2">
+    <div id="cart-scroll" class="flex-grow overflow-y-auto space-y-4 pr-2" style="scroll-behavior: smooth;">
         <ul class="space-y-4">
           {% for p in producten %}
             <li data-key="{{ p.key }}" class="lijst-gescand">
               <div class="flex items-center gap-4 bg-white dark:bg-zinc-900 p-3 rounded-lg">
-                <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16" data-alt="Broodje Tonijn" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBW9AqUuipuxEh9m36Va5bWDuzqx8r8HL4iMaQFF7yck1buye73-Ko5O2a7ZJsfoK4AyhiKnRZitOMNoxp7gB2eastCvMGIhY0u2P-xV58wuP9uv9Z9lB8IvSVYLpGJaySQ0lL-FI4Rwzphu6OoC9zxJldSOEs_Bc8fRVBO8Ld-6NNZSsRb4fSRSeIm01BXjEFxLBhc_0-fmid9JU7vJx_bH5hY1fIGgReCM6ULbwXLOYmQByWB7tJA42wQ12qe-_UPCBGDsdokgb4");'></div>
+                <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16" data-alt="Broodje Tonijn" style="background-image: url('{{ p.afbeelding_url }}')"></div>
                 <div class="flex-grow">
                   <p class="text-base font-medium text-gray-800 dark:text-white">{{ p.naam }}</p>
                   <p class="text-sm text-gray-500 dark:text-gray-400">€{{ '%.2f'|format(p.subtotaal) }}</p>
                 </div>
                 <div class="line-actions flex items-center gap-2 text-gray-800 dark:text-white">
-                  <form action="{{ url_for('minus') }}" method="post" class="inline">
+                  <form hx-post="{{ url_for('minus') }}" hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" class="inline">
                     <input type="hidden" name="code" value="{{ p.key }}" />
                     <button type="submit" class="btn-icon minus text-lg font-medium flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600">-</button>
                   </form>
                   <p class="text-base font-medium w-10 p-0 text-center bg-transparent tabular-nums"> {{ p.aantal }} </p>
-                  <form action="{{ url_for('plus') }}" method="post" class="inline">
+                    <form hx-post="{{ url_for('plus') }}" hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" class="inline">
                     <input type="hidden" name="code" value="{{ p.key }}" />
                     <button type="submit" class="btn-icon plus text-lg font-medium flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600">+</button>
                   </form>
                 </div>
-                <form action="{{ url_for('delete') }}" method="post" class="inline">
+                  <form hx-post="{{ url_for('delete') }}" hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" class="inline">
                   <input type="hidden" name="code" value="{{ p.key }}" />
                   <button type="submit" class="btn-icon remove text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 ml-2">
                     <span class="material-symbols-outlined">delete</span>
@@ -234,22 +235,67 @@
   <p class="error" role="alert">{% if fout %}{{ fout }}{% endif %}</p>
 
   <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const form = document.querySelector("form.scan-form");
-    const input = form?.querySelector("input[name='code']");
-    const cart = document.querySelector(".cart");
-    const cartList = document.querySelector(".cart ul");
-    const totalEl = document.querySelector(".total");
-    const errorEl = document.querySelector(".error");
-    const toast = document.getElementById("toast");
 
-    if (!form || !input || !cartList || !totalEl) return;
+  // Slim scroll: alleen naar onderen als je al (bijna) onderaan was
+  function scrollCartToBottom() {
+    const scroller = document.getElementById('cart-scroll');
+    if (!scroller) return;
+    const distanceFromBottom = scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight;
+    if (distanceFromBottom <= 80) {
+      scroller.scrollTo({ top: scroller.scrollHeight, behavior: 'smooth' });
+    }
+  }
 
-    function showToast(msg, type = "info") {
-      if (!toast) return;
-      toast.textContent = msg;
-      toast.className = `toast ${type} show`;
-      setTimeout(() => { toast.classList.remove("show"); }, 2200);
+  // Bewaar positie t.o.v. onderkant vóór swap, herstel na swap
+  let __cartOffsetFromBottom = null;
+  let __cartWasPinned = false;
+
+  document.body.addEventListener('htmx:beforeSwap', (e) => {
+    if (e.detail && e.detail.target && e.detail.target.matches('.cart')) {
+      const scroller = document.getElementById('cart-scroll');
+      if (!scroller) return;
+      __cartOffsetFromBottom = scroller.scrollHeight - scroller.scrollTop;
+      __cartWasPinned = (scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight) <= 80;
+    }
+  });
+
+  document.body.addEventListener('htmx:afterSwap', (e) => {
+    if (e.detail && e.detail.target && e.detail.target.matches('.cart')) {
+      const scroller = document.getElementById('cart-scroll');
+      if (!scroller) return;
+      // Herstel oude positie zonder animatie
+      scroller.style.scrollBehavior = 'auto';
+      if (__cartOffsetFromBottom !== null) {
+        scroller.scrollTop = Math.max(0, scroller.scrollHeight - __cartOffsetFromBottom);
+      }
+      scroller.style.scrollBehavior = '';
+      // Als je vóór de swap al onderaan was, tik dan soepel naar volledig onderaan
+      if (__cartWasPinned) {
+        scroller.scrollTo({ top: scroller.scrollHeight, behavior: 'smooth' });
+      }
+      __cartOffsetFromBottom = null;
+      __cartWasPinned = false;
+    }
+  });
+
+  document.body.addEventListener('htmx:afterSwap', (e) => {
+    if (e.detail && e.detail.target && e.detail.target.matches('.cart')) {
+      const path = e.detail.requestConfig && e.detail.requestConfig.path || '';
+      const isScan = path.includes('/scan');
+      const isPlus = path.includes('/plus');
+      if (__cartWasPinned && (isScan || isPlus)) {
+        scrollCartToBottom();
+      }
+    }
+  });
+  document.body.addEventListener('htmx:afterSettle', (e) => {
+    if (e.detail && e.detail.target && e.detail.target.matches('.cart')) {
+      const path = e.detail.requestConfig && e.detail.requestConfig.path || '';
+      const isScan = path.includes('/scan');
+      const isPlus = path.includes('/plus');
+      if (__cartWasPinned && (isScan || isPlus)) {
+        scrollCartToBottom();
+      }
     }
   });
   </script>
