@@ -1,102 +1,50 @@
-/* --- Algemene layout --- */
-body {
-  font-family: "Segoe UI", Arial, sans-serif;
-  background-color: #f5f6fa;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  color: #333;
+material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
 }
 
-/* --- Scanformulier --- */
-form {
-  margin: 30px auto;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
+.logo { background-image: url("/static/img/ui/zuyd_logo.png") }
 
-input[type="text"] {
-  font-size: 1.4em;
-  padding: 12px 16px;
-  border: 2px solid #ccc;
+[type=submit].toevoegen{
+  padding: 12px 24px 12px 24px;
+  margin-left: -10px;
   border-radius: 8px;
-  width: 300px;
-  outline: none;
-  transition: border-color 0.2s ease;
-}
-
-input[type="text"]:focus {
-  border-color: #2b6cb0;
-}
-
-button {
-  background-color: #2b6cb0;
-  color: white;
-  font-size: 1.2em;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-button:hover {
-  background-color: #224a86;
-}
-
-/* --- Winkelmandje --- */
-.cart {
-  display: inline-block;
-  background: white;
-  padding: 25px 40px;
-  margin-top: 30px;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  text-align: left;
-}
-
-.cart h2 {
-  margin-top: 0;
-  border-bottom: 2px solid #2b6cb0;
-  padding-bottom: 8px;
-}
-
-.cart ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.cart li {
-  font-size: 1.1em;
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.cart li:last-child {
-  border-bottom: none;
-}
-
-/* --- Totaalprijs --- */
-.total {
-  font-size: 1.4em;
-  font-weight: bold;
-  margin-top: 15px;
-}
-
-/* --- Resetknop --- */
-form[action*="reset"] button {
-  background-color: #e53e3e;
-}
-
-form[action*="reset"] button:hover {
-  background-color: #c53030;
-}
-
-/* --- Foutmelding --- */
-.error {
-  color: #e53e3e;
+  background-color: #f6f7f8;
   font-weight: 500;
-  margin-bottom: 10px;
+}
+
+[type=submit].toevoegen:hover{
+  background-color: #e2e4e6;
+}
+
+[type=submit].toevoegen:after{
+  background-color: #e2e4e6;
+}
+
+.knop-afbreken{
+  padding: 10px 20px 10px 20px;
+  border-radius: 8px;
+  background-color: #e5e7eb;
+  color: #1f2937;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.knop-afbreken:hover{
+  background-color: #d1d5db;
+}
+
+.lijst-gescand {
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: 100px;
+}
+
+.tabs button.active {
+  font-weight: 600;
+  color: #E81A32;
+  border-bottom: #E81A32 2px solid;
 }

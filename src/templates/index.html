@@ -1,140 +1,305 @@
-<file name=src/templates/index.html><!DOCTYPE html>
-<html lang="nl">
-<head>
-  <meta charset="UTF-8">
-  <title>Zelfscankassa</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Zuyd Hogeschool Self-Checkout</title>
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='img/ui/zuyd_logo.png') }}">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#E81A32",
+              "background-light": "#f6f7f8",
+              "background-dark": "#101a22",
+            },
+            fontFamily: {
+              "display": ["Public Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+</script>
+<script src="https://unpkg.com/htmx.org@1.9.10"></script>
 </head>
 
-<body>
 
-  <form action="{{ url_for('scan') }}" method="post" class="scan-form" style="margin:20px 0">
-    <input type="text" name="code" placeholder="Scan productcode" autofocus>
-    <button type="submit">Toevoegen</button>
-  </form>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#111518] dark:text-white">
+<div class="flex h-screen">
+<!-- Left Side: Item Selection -->
+  <div class="flex flex-col w-3/5 bg-white dark:bg-background-dark p-6">
+    <!-- Header -->
+      <div class="flex items-center gap-3 mb-6">
+        <div class="bg-center bg-no-repeat aspect-square bg-cover size-12 logo" data-alt="Zuyd Hogeschool Logo"></div>
+          <div>
+            <h1 class="text-xl font-bold text-gray-800 dark:text-white">Zuyd Hogeschool</h1>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Zuyd. Het begint met jou!
+            </p>
+          </div>
+      </div>
+    <!-- Search Bar -->
+    <div class="mb-6">
+      <form hx-post="{{ url_for('scan') }}" hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" class="scan-form" hx-on::after-request="this.reset(); scrollCartToBottom();" hx-on::after-swap="scrollCartToBottom()">
+        <label class="flex flex-col min-w-40 h-12 w-full">
+          <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+            <div class="text-gray-500 dark:text-gray-400 flex border-none bg-background-light dark:bg-zinc-800 items-center justify-center pl-4 rounded-l-lg border-r-0">
+              <span class="material-symbols-outlined">qr_code_scanner</span>
+            </div>
+            <input type="text" name="code" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-gray-800 dark:text-white focus:outline-0 focus:ring-0 border-none bg-background-light dark:bg-zinc-800 h-full placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 text-base font-normal" placeholder="Scan your item's barcode here" value=""/>
+            <button type="submit" class="toevoegen">Toevoegen</button>
+          </div>
+        </label>
+      </form>
+    </div>
+    <!-- Category Navigation -->
+
+    <div class="tabs flex border-b border-gray-200 dark:border-gray-700 mb-4">
+      <button class="tab active flex items-center gap-2 px-4 py-3 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors" onclick="openTab('broodjes')">
+        <span class="material-symbols-outlined">lunch_dining</span>
+        Broodjes
+      </button>
+
+      <button class="tab flex items-center gap-2 px-4 py-3 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors" onclick="openTab('dranken')">
+        <span class="material-symbols-outlined">local_bar</span>
+        Dranken
+      </button>
+
+      <button class="tab flex items-center gap-2 px-4 py-3 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors" onclick="openTab('snacks')">
+        <span class="material-symbols-outlined">icecream</span>
+        Snacks
+      </button>
+
+      <button class="tab flex items-center gap-2 px-4 py-3 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors" onclick="openTab('other')">
+        <span class="material-symbols-outlined">more_horiz</span>
+        Overige
+      </button>
+    </div>
+
+<div id="broodjes" class="tab-content">
+  <div class="flex-grow overflow-y-auto pr-2">
+    <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
+      {% for p in broodjes %}
+        <a hx-post="{{ url_for('scan') }}" hx-vals='{"code":"{{ p.code }}"}' hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" hx-on::after-swap="scrollCartToBottom()" class="block">
+          <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
+            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg"
+                 style="background-image: url('{{ p.afbeelding_url }}')"></div>
+            <div>
+              <p class="text-base font-medium text-gray-800 dark:text-white">{{ p.naam }}</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">€{{ '%.2f'|format(p.prijs) }}</p>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div id="dranken" class="tab-content hidden">
+  <div class="flex-grow overflow-y-auto pr-2">
+    <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
+      {% for p in dranken %}
+        <a hx-post="{{ url_for('scan') }}" hx-vals='{"code":"{{ p.code }}"}' hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" hx-on::after-swap="scrollCartToBottom()" class="block">
+          <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
+            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg"
+                 style="background-image: url('{{ p.afbeelding_url }}')"></div>
+            <div>
+              <p class="text-base font-medium text-gray-800 dark:text-white">{{ p.naam }}</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">€{{ '%.2f'|format(p.prijs) }}</p>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div id="snacks" class="tab-content hidden">
+  <div class="flex-grow overflow-y-auto pr-2">
+    <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
+      {% for p in snacks %}
+        <a hx-post="{{ url_for('scan') }}" hx-vals='{"code":"{{ p.code }}"}' hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" hx-on::after-swap="scrollCartToBottom()" class="block">
+          <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
+            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg"
+                 style="background-image: url('{{ p.afbeelding_url }}')"></div>
+            <div>
+              <p class="text-base font-medium text-gray-800 dark:text-white">{{ p.naam }}</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">€{{ '%.2f'|format(p.prijs) }}</p>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div id="other" class="tab-content hidden">
+  <div class="flex-grow overflow-y-auto pr-2">
+    <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
+      {% for p in overige %}
+        <a hx-post="{{ url_for('scan') }}" hx-vals='{"code":"{{ p.code }}"}' hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" hx-on::after-swap="scrollCartToBottom()" class="block">
+          <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
+            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg"
+                 style="background-image: url('{{ p.afbeelding_url }}')"></div>
+            <div>
+              <p class="text-base font-medium text-gray-800 dark:text-white">{{ p.naam }}</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">€{{ '%.2f'|format(p.prijs) }}</p>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+    <script>
+      function openTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'))
+        document.getElementById(tabName).classList.remove('hidden')
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'))
+        event.currentTarget.classList.add('active')
+    }
+    </script>
+  </div>
+
+
+  <!-- Right Side: Cart Summary -->
+  <div class="cart flex flex-col w-2/5 bg-background-light dark:bg-zinc-800 p-6">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Winkelwagen</h2>
+        <form hx-post="{{ url_for('reset') }}" hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" hx-on::after-swap="scrollCartToBottom()">
+        <button class="knop-afbreken" href="{{ url_for('reset') }}">Afbreken</button>
+      </form>
+    </div>
+    <div id="cart-scroll" class="flex-grow overflow-y-auto space-y-4 pr-2" style="scroll-behavior: smooth;">
+        <ul class="space-y-4">
+          {% for p in producten %}
+            <li data-key="{{ p.key }}" class="lijst-gescand">
+              <div class="flex items-center gap-4 bg-white dark:bg-zinc-900 p-3 rounded-lg">
+                <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16" data-alt="Broodje Tonijn" style="background-image: url('{{ p.afbeelding_url }}')"></div>
+                <div class="flex-grow">
+                  <p class="text-base font-medium text-gray-800 dark:text-white">{{ p.naam }}</p>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">€{{ '%.2f'|format(p.subtotaal) }}</p>
+                </div>
+                <div class="line-actions flex items-center gap-2 text-gray-800 dark:text-white">
+                  <form hx-post="{{ url_for('minus') }}" hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" class="inline">
+                    <input type="hidden" name="code" value="{{ p.key }}" />
+                    <button type="submit" class="btn-icon minus text-lg font-medium flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600">-</button>
+                  </form>
+                  <p class="text-base font-medium w-10 p-0 text-center bg-transparent tabular-nums"> {{ p.aantal }} </p>
+                    <form hx-post="{{ url_for('plus') }}" hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" class="inline">
+                    <input type="hidden" name="code" value="{{ p.key }}" />
+                    <button type="submit" class="btn-icon plus text-lg font-medium flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600">+</button>
+                  </form>
+                </div>
+                  <form hx-post="{{ url_for('delete') }}" hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" class="inline">
+                  <input type="hidden" name="code" value="{{ p.key }}" />
+                  <button type="submit" class="btn-icon remove text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 ml-2">
+                    <span class="material-symbols-outlined">delete</span>
+                  </button>
+                </form>
+              </div>
+              </li>
+          {% endfor %}
+          {% if not producten %}
+            <li></li>
+          {% endif %}
+        </ul>
+      <!-- Cart Item -->
+    </div>
+    <!-- Price Summary & Actions -->
+    <div class="mt-auto pt-6 border-t border-gray-200 dark:border-gray-700">
+        <div class="flex justify-between text-xl font-bold">
+          <p>Totaal</p>
+          <p class="total">Totaal: €{{ '%.2f'|format(totaal) }}</p>
+        </div>
+      </div>
+      <div class="mt-6 flex flex-col gap-4">
+        <button class="w-full flex items-center justify-center rounded-lg h-12 px-6 bg-primary text-white text-base font-bold hover:bg-primary/90 transition-colors">
+          Betalen
+        </button>
+        <button class="w-full flex items-center justify-center rounded-lg h-12 px-6 bg-gray-200 dark:bg-zinc-700 text-gray-800 dark:text-white text-base font-bold hover:bg-gray-300 dark:hover:bg-zinc-600 transition-colors">
+          Medewerker
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
   <p class="error" role="alert">{% if fout %}{{ fout }}{% endif %}</p>
 
-  <div class="cart">
-    <h2>Winkelmandje</h2>
-    <ul>
-      {% for p in producten %}
-        <li data-key="{{ p.key }}">
-          <span class="line-name">{{ p.aantal }}x {{ p.naam }} – €{{ '%.2f'|format(p.subtotaal) }}</span>
-          <span class="line-actions">
-            <button type="button" class="btn-icon minus" aria-label="Verlaag aantal" data-key="{{ p.key }}">−</button>
-            <button type="button" class="btn-icon plus" aria-label="Verhoog aantal" data-key="{{ p.key }}">+</button>
-            <button type="button" class="btn-icon remove" aria-label="Verwijder" data-key="{{ p.key }}">🗑️</button>
-          </span>
-        </li>
-      {% endfor %}
-      {% if not producten %}
-        <li>Leeg</li>
-      {% endif %}
-    </ul>
-
-    <p class="total">Totaal: €{{ '%.2f'|format(totaal) }}</p>
-
-    <form action="{{ url_for('reset') }}" method="post">
-      <button type="submit">Leeg winkelmandje</button>
-    </form>
-  </div>
-
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
   <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const form = document.querySelector("form.scan-form");
-    const input = form?.querySelector("input[name='code']");
-    const cart = document.querySelector(".cart");
-    const cartList = document.querySelector(".cart ul");
-    const totalEl = document.querySelector(".total");
-    const errorEl = document.querySelector(".error");
-    const toast = document.getElementById("toast");
 
-    if (!form || !input || !cartList || !totalEl) return;
-
-    function showToast(msg, type = "info") {
-      if (!toast) return;
-      toast.textContent = msg;
-      toast.className = `toast ${type} show`;
-      setTimeout(() => { toast.classList.remove("show"); }, 2200);
+  // Slim scroll: alleen naar onderen als je al (bijna) onderaan was
+  function scrollCartToBottom() {
+    const scroller = document.getElementById('cart-scroll');
+    if (!scroller) return;
+    const distanceFromBottom = scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight;
+    if (distanceFromBottom <= 80) {
+      scroller.scrollTo({ top: scroller.scrollHeight, behavior: 'smooth' });
     }
+  }
 
-    function renderList(items) {
-      cartList.innerHTML = "";
-      (items || []).forEach(p => {
-        const li = document.createElement("li");
-        const prijs = (typeof p.prijs === "number") ? p.prijs : parseFloat(p.prijs);
-        const aantal = (typeof p.aantal === "number") ? p.aantal : parseInt(p.aantal || 1, 10);
-        const subtotaal = prijs * aantal;
-        li.dataset.key = p.key || p.code || p.naam;
-        li.innerHTML = `
-          <span class="line-name">${aantal}x ${p.naam} – €${subtotaal.toFixed(2)}</span>
-          <span class="line-actions">
-            <button type="button" class="btn-icon minus" data-key="${li.dataset.key}">−</button>
-            <button type="button" class="btn-icon plus" data-key="${li.dataset.key}">+</button>
-            <button type="button" class="btn-icon remove" data-key="${li.dataset.key}">🗑️</button>
-          </span>`;
-        cartList.appendChild(li);
-      });
-      if (!items || items.length === 0) {
-        const li = document.createElement("li");
-        li.textContent = "Leeg";
-        cartList.appendChild(li);
+  // Bewaar positie t.o.v. onderkant vóór swap, herstel na swap
+  let __cartOffsetFromBottom = null;
+  let __cartWasPinned = false;
+
+  document.body.addEventListener('htmx:beforeSwap', (e) => {
+    if (e.detail && e.detail.target && e.detail.target.matches('.cart')) {
+      const scroller = document.getElementById('cart-scroll');
+      if (!scroller) return;
+      __cartOffsetFromBottom = scroller.scrollHeight - scroller.scrollTop;
+      __cartWasPinned = (scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight) <= 80;
+    }
+  });
+
+  document.body.addEventListener('htmx:afterSwap', (e) => {
+    if (e.detail && e.detail.target && e.detail.target.matches('.cart')) {
+      const scroller = document.getElementById('cart-scroll');
+      if (!scroller) return;
+      // Herstel oude positie zonder animatie
+      scroller.style.scrollBehavior = 'auto';
+      if (__cartOffsetFromBottom !== null) {
+        scroller.scrollTop = Math.max(0, scroller.scrollHeight - __cartOffsetFromBottom);
+      }
+      scroller.style.scrollBehavior = '';
+      // Als je vóór de swap al onderaan was, tik dan soepel naar volledig onderaan
+      if (__cartWasPinned) {
+        scroller.scrollTo({ top: scroller.scrollHeight, behavior: 'smooth' });
+      }
+      __cartOffsetFromBottom = null;
+      __cartWasPinned = false;
+    }
+  });
+
+  document.body.addEventListener('htmx:afterSwap', (e) => {
+    if (e.detail && e.detail.target && e.detail.target.matches('.cart')) {
+      const path = e.detail.requestConfig && e.detail.requestConfig.path || '';
+      const isScan = path.includes('/scan');
+      const isPlus = path.includes('/plus');
+      if (__cartWasPinned && (isScan || isPlus)) {
+        scrollCartToBottom();
       }
     }
-
-    async function postJSON(url, payload) {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-      return res.json();
-    }
-
-    // Scannen zonder refresh
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const code = input.value.trim();
-      if (!code) return;
-      const data = await postJSON("/scan-json", { code });
-      errorEl.textContent = data.error ? data.error : "";
-      if (data.error) showToast(data.error, "error");
-      renderList(data.producten);
-      const totaal = (typeof data.totaal === "number") ? data.totaal : parseFloat(data.totaal || 0);
-      totalEl.textContent = `Totaal: €${totaal.toFixed(2)}`;
-      input.value = "";
-    });
-
-    // Event delegation voor +, − en prullenbak
-    cart.addEventListener("click", async (e) => {
-      const btn = e.target.closest(".btn-icon");
-      if (!btn) return;
-      const key = btn.dataset.key;
-      if (!key) return;
-
-      if (btn.classList.contains("plus")) {
-        const data = await postJSON("/update-json", { key, delta: 1 });
-        if (data.error) showToast(data.error, "error");
-        renderList(data.producten);
-        totalEl.textContent = `Totaal: €${Number(data.totaal).toFixed(2)}`;
-      } else if (btn.classList.contains("minus")) {
-        const data = await postJSON("/update-json", { key, delta: -1 });
-        if (data.error) showToast(data.error, "error");
-        renderList(data.producten);
-        totalEl.textContent = `Totaal: €${Number(data.totaal).toFixed(2)}`;
-      } else if (btn.classList.contains("remove")) {
-        const data = await postJSON("/remove-json", { key });
-        if (data.error) showToast(data.error, "error");
-        renderList(data.producten);
-        totalEl.textContent = `Totaal: €${Number(data.totaal).toFixed(2)}`;
+  });
+  document.body.addEventListener('htmx:afterSettle', (e) => {
+    if (e.detail && e.detail.target && e.detail.target.matches('.cart')) {
+      const path = e.detail.requestConfig && e.detail.requestConfig.path || '';
+      const isScan = path.includes('/scan');
+      const isPlus = path.includes('/plus');
+      if (__cartWasPinned && (isScan || isPlus)) {
+        scrollCartToBottom();
       }
-    });
+    }
   });
   </script>
+
 </body>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 </html>
-</file>
