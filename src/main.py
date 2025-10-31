@@ -1,3 +1,29 @@
+#
+# Helper: render volledige kassa-pagina zodat HTMX `.cart` kan selecteren
+def render_kassa_page(fout=None):
+    producten, totaal = aggregate_cart_ordered(scanned)
+    conn = sqlite3.connect("data/products.db")
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url FROM producten WHERE categorie = 'Broodjes'")
+    broodjes = [dict(row) for row in cursor.fetchall()]
+    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url FROM producten WHERE categorie IN ('Warme dranken', 'Koude dranken')")
+    dranken = [dict(row) for row in cursor.fetchall()]
+    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url FROM producten WHERE categorie IN ('Snacks warm', 'Snacks koud')")
+    snacks = [dict(row) for row in cursor.fetchall()]
+    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url FROM producten WHERE categorie NOT IN ('Broodjes', 'Warme dranken', 'Koude dranken', 'Snacks warm', 'Snacks koud')")
+    overige = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+    return render_template(
+        "kassa.html",
+        producten=producten,
+        totaal=totaal,
+        fout=fout,
+        broodjes=broodjes,
+        dranken=dranken,
+        snacks=snacks,
+        overige=overige
+    )
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from database import get_product
 import sqlite3
@@ -93,7 +119,7 @@ def menu_dranken():
     dranken = [dict(row) for row in cursor.fetchall()]
     conn.close()
 
-    return render_template("index.html", dranken=dranken)
+    return render_template("kassa.html", dranken=dranken)
 
 
 # /minus?code=5008 of form POST, or /minus/5008
@@ -129,7 +155,7 @@ def minus(code=None):
             pass
 
     # 3) Redirect terug naar de home zodat agg/totaal opnieuw worden berekend
-    return redirect(url_for("home"))
+    return render_kassa_page()
 
 
 # /plus?code=5008 of form POST, or /plus/5008
@@ -156,13 +182,7 @@ def plus(code=None):
         product = get_product(code)
         if not product:
             # Toon dezelfde home met foutmelding
-            producten, totaal = aggregate_cart_ordered(scanned)
-            return render_template(
-                "index.html",
-                producten=producten,
-                totaal=totaal,
-                fout="Product niet gevonden",
-            )
+            return render_kassa_page("Product niet gevonden")
         proto = product
 
     # 4) +1 toevoegen door een instantie toe te voegen aan `scanned`
@@ -170,7 +190,7 @@ def plus(code=None):
     k = str(key_of(proto))
     if k and k not in cart_order:
         cart_order.append(k)
-    return redirect(url_for("home"))
+    return render_kassa_page()
 
 
 @app.route("/delete", methods=["GET", "POST"])            # /delete?code=5008 of form POST
@@ -198,7 +218,7 @@ def delete(code=None):
     except ValueError:
         pass
 
-    return redirect(url_for("home"))
+    return render_kassa_page()
 
 @app.route("/", methods=["GET"])
 def home():
@@ -255,6 +275,38 @@ def home():
         overige=overige
     )
 
+
+# Kassa-route voor kassascherm met huidige winkelwagen
+@app.route("/kassa", methods=["GET"])
+def kassa():
+    # Haal winkelwagen en totaal op
+    producten, totaal = aggregate_cart_ordered(scanned)
+    # Laad opnieuw producten voor de categorieën
+    conn = sqlite3.connect("data/products.db")
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url FROM producten WHERE categorie = 'Broodjes'")
+    broodjes = [dict(row) for row in cursor.fetchall()]
+    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url FROM producten WHERE categorie IN ('Warme dranken', 'Koude dranken')")
+    dranken = [dict(row) for row in cursor.fetchall()]
+    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url FROM producten WHERE categorie IN ('Snacks warm', 'Snacks koud')")
+    snacks = [dict(row) for row in cursor.fetchall()]
+    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url FROM producten WHERE categorie NOT IN ('Broodjes', 'Warme dranken', 'Koude dranken', 'Snacks warm', 'Snacks koud')")
+    overige = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+
+    return render_template(
+        "kassa.html",
+        producten=producten,
+        totaal=totaal,
+        fout=None,
+        broodjes=broodjes,
+        dranken=dranken,
+        snacks=snacks,
+        overige=overige
+    )
+
 @app.route("/scan", methods=["GET", "POST"]) 
 @app.route("/scan/<code>", methods=["GET"]) 
 def scan(code=None):
@@ -273,21 +325,19 @@ def scan(code=None):
         k = str(key_of(product))
         if k and k not in cart_order:
             cart_order.append(k)
-        return redirect(url_for("home"))
+        return render_kassa_page()
     else:
-        producten, totaal = aggregate_cart_ordered(scanned)
-        return render_template(
-            "index.html",
-            producten=producten,
-            totaal=totaal,
-            fout="Product niet gevonden",
-        )
+        return render_kassa_page("Product niet gevonden")
 
 
 @app.route("/reset", methods=["POST"])
 def reset():
     scanned.clear()
     cart_order.clear()
+    # Als verzoek vanuit HTMX komt, forceer een volledige redirect naar index
+    if request.headers.get("HX-Request"):
+        return ("", 204, {"HX-Redirect": url_for("home")})
+    # Anders normale server-side redirect
     return redirect(url_for("home"))
 
 
