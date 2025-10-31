@@ -38,6 +38,91 @@ def aggregate_cart(items):
     return list(agg.values())
 
 
+
+# /minus?code=5008 of form POST, or /minus/5008
+@app.route("/minus", methods=["GET", "POST"])            # /minus?code=5008 of form POST
+@app.route("/minus/<code>", methods=["GET", "POST"])     # /minus/5008
+def minus(code=None):
+    """Verlaag het aantal van een product met 1 door één instantie uit `scanned` te verwijderen."""
+    # 1) Code bepalen uit pad of query/form
+    if code is None:
+        code = (request.values.get("code") or "").strip()
+    else:
+        code = str(code).strip()
+
+    if not code:
+        return redirect(url_for("home"))
+
+    # 2) Zoek één match in scanned op basis van stabiele key of p['code'] en verwijder die
+    idx = next((i for i, p in enumerate(scanned)
+                if str(key_of(p)) == code or str(p.get("code")) == code), None)
+    if idx is not None:
+        scanned.pop(idx)
+
+    # 3) Redirect terug naar de home zodat agg/totaal opnieuw worden berekend
+    return redirect(url_for("home"))
+
+
+# /plus?code=5008 of form POST, or /plus/5008
+@app.route("/plus", methods=["GET", "POST"])            # /plus?code=5008 of form POST
+@app.route("/plus/<code>", methods=["GET", "POST"])     # /plus/5008
+def plus(code=None):
+    """Verhoog het aantal van een product (geïdentificeerd via code/key) met 1.
+    We muteren de bronlijst `scanned`; `agg` is afgeleid en wordt bij renderen herberekend.
+    """
+    # 1) Code bepalen uit pad of query/form
+    if code is None:
+        code = (request.values.get("code") or "").strip()
+    else:
+        code = str(code).strip()
+
+    if not code:
+        return redirect(url_for("home"))
+
+    # 2) Probeer een bestaand item in het mandje te vinden op basis van onze stabiele key
+    proto = next((p for p in scanned if str(key_of(p)) == code or str(p.get("code")) == code), None)
+
+    # 3) Als het nog niet in het mandje zit, haal het uit de database
+    if proto is None:
+        product = get_product(code)
+        if not product:
+            # Toon dezelfde home met foutmelding
+            totaal = calculate_total(scanned)
+            producten = aggregate_cart(scanned)
+            return render_template(
+                "index.html",
+                producten=producten,
+                totaal=totaal,
+                fout="Product niet gevonden",
+            )
+        proto = product
+
+    # 4) +1 toevoegen door een instantie toe te voegen aan `scanned`
+    scanned.append(proto)
+    return redirect(url_for("home"))
+
+
+@app.route("/delete", methods=["GET", "POST"])            # /delete?code=5008 of form POST
+@app.route("/delete/<code>", methods=["GET", "POST"])     # /delete/5008
+def delete(code=None):
+    """Verwijder alle instanties van een product (op basis van key/code) uit het mandje."""
+    global scanned
+    # Code bepalen uit pad of query/form
+    if code is None:
+        code = (request.values.get("code") or "").strip()
+    else:
+        code = str(code).strip()
+
+    if not code:
+        return redirect(url_for("home"))
+
+    # Filter alles weg dat matcht op stabiele key of p['code']
+    scanned = [p for p in scanned if not (
+        str(key_of(p)) == code or str(p.get("code")) == code
+    )]
+
+    return redirect(url_for("home"))
+
 @app.route("/", methods=["GET"])
 def home():
     totaal = calculate_total(scanned)

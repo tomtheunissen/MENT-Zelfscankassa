@@ -4,6 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Zuyd Hogeschool Self-Checkout</title>
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='img/ui/zuyd_logo.png') }}">
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -26,7 +27,6 @@
         },
       }
 </script>
-
 </head>
 
 
@@ -58,26 +58,31 @@
       </form>
     </div>
     <!-- Category Navigation -->
-    <div class="flex border-b border-gray-200 dark:border-gray-700 mb-4">
-      <button class="flex items-center gap-2 px-4 py-3 text-primary border-b-2 border-primary font-semibold">
+
+    <div class="tabs flex border-b border-gray-200 dark:border-gray-700 mb-4">
+      <button class="tab active flex items-center gap-2 px-4 py-3 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors" onclick="openTab('sandwiches')">
         <span class="material-symbols-outlined">lunch_dining</span>
-        <span>Sandwiches</span>
-        </button>
-      <button class="flex items-center gap-2 px-4 py-3 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors">
+        Sandwiches
+      </button>
+
+      <button class="tab flex items-center gap-2 px-4 py-3 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors" onclick="openTab('drinks')">
         <span class="material-symbols-outlined">local_bar</span>
-        <span>Drinks</span>
+        Drinks
       </button>
-      <button class="flex items-center gap-2 px-4 py-3 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors">
+
+      <button class="tab flex items-center gap-2 px-4 py-3 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors" onclick="openTab('snacks')">
         <span class="material-symbols-outlined">icecream</span>
-        <span>Snacks</span>
+        Snacks
       </button>
-      <button class="flex items-center gap-2 px-4 py-3 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors">
+
+      <button class="tab flex items-center gap-2 px-4 py-3 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors" onclick="openTab('other')">
         <span class="material-symbols-outlined">more_horiz</span>
-        <span>Other</span>
+        Overige
       </button>
     </div>
-    <!-- Item Grid -->
-    <div class="flex-grow overflow-y-auto pr-2">
+
+<div id="sandwiches" class="tab-content">
+<div class="flex-grow overflow-y-auto pr-2">
       <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
         <a href="{{ url_for('scan', code=5008) }}" class="block">
           <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
@@ -135,6 +140,34 @@
         </a>
       </div>
     </div>
+</div>
+
+<div id="drinks" class="tab-content hidden">
+  test drank
+  {% for p in producten if p.categorie == "Drinks" %}
+    <!-- Productkaart -->
+  {% endfor %}
+</div>
+
+<div id="snacks" class="tab-content hidden">
+  test snacks
+  {% for p in producten if p.categorie == "Drinks" %}
+    <!-- Productkaart -->
+  {% endfor %}
+</div>
+
+<div id="other" class="tab-content hidden">
+  test overige
+</div>
+
+    <script>
+      function openTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'))
+        document.getElementById(tabName).classList.remove('hidden')
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'))
+        event.currentTarget.classList.add('active')
+    }
+    </script>
   </div>
 
 
@@ -147,7 +180,7 @@
       </form>
     </div>
     <div class="flex-grow overflow-y-auto space-y-4 pr-2">
-        <ul>
+        <ul class="space-y-4">
           {% for p in producten %}
             <li data-key="{{ p.key }}" class="lijst-gescand">
               <div class="flex items-center gap-4 bg-white dark:bg-zinc-900 p-3 rounded-lg">
@@ -157,13 +190,22 @@
                   <p class="text-sm text-gray-500 dark:text-gray-400">€{{ '%.2f'|format(p.subtotaal) }}</p>
                 </div>
                 <div class="line-actions flex items-center gap-2 text-gray-800 dark:text-white">
-                  <button type="button" data-key="{{ p.key }}" class="btn-icon minus text-lg font-medium flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600">-</button>
+                  <form action="{{ url_for('minus') }}" method="post" class="inline">
+                    <input type="hidden" name="code" value="{{ p.key }}" />
+                    <button type="submit" class="btn-icon minus text-lg font-medium flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600">-</button>
+                  </form>
                   <p class="text-base font-medium w-10 p-0 text-center bg-transparent tabular-nums"> {{ p.aantal }} </p>
-                  <button type="button" data-key="{{ p.key }}" class="btn-icon plus text-lg font-medium flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600">+</button>
+                  <form action="{{ url_for('plus') }}" method="post" class="inline">
+                    <input type="hidden" name="code" value="{{ p.key }}" />
+                    <button type="submit" class="btn-icon plus text-lg font-medium flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600">+</button>
+                  </form>
                 </div>
-                <button type="button" data-key="{{ p.key }}" class="btn-icon remove text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 ml-2">
-                  <span class="material-symbols-outlined">delete</span>
-                </button>
+                <form action="{{ url_for('delete') }}" method="post" class="inline">
+                  <input type="hidden" name="code" value="{{ p.key }}" />
+                  <button type="submit" class="btn-icon remove text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 ml-2">
+                    <span class="material-symbols-outlined">delete</span>
+                  </button>
+                </form>
               </div>
               </li>
           {% endfor %}
@@ -212,103 +254,6 @@
       toast.className = `toast ${type} show`;
       setTimeout(() => { toast.classList.remove("show"); }, 2200);
     }
-
-    function renderList(items) {
-      // 1) Bewaar huidige images per key voordat we de lijst leegmaken
-      const imgByKey = {};
-      cartList.querySelectorAll('li[data-key]').forEach(li => {
-        const key = li.getAttribute('data-key');
-        const bg = li.querySelector('.bg-cover');
-        if (key && bg) imgByKey[key] = bg.style.backgroundImage || '';
-      });
-
-      // 2) Herbouw de lijst met kaart-layout
-      cartList.innerHTML = '';
-      (items || []).forEach(p => {
-        const li = document.createElement('li');
-        const prijs = (typeof p.prijs === 'number') ? p.prijs : parseFloat(p.prijs);
-        const aantal = (typeof p.aantal === 'number') ? p.aantal : parseInt(p.aantal || 1, 10);
-        const key = p.key || p.code || p.naam;
-        const subtotaal = prijs * aantal;
-        // gebruik p.image als beschikbaar; anders de eerder gebruikte bg-image; anders leeg
-        const imageStyle = (p.image ? `url('${p.image}')` : (imgByKey[key] || ''));
-
-        li.dataset.key = key;
-        li.dataset.price = String(prijs);
-        li.className = 'lijst-gescand';
-        li.innerHTML = `
-          <div class="flex items-center gap-4 bg-white dark:bg-zinc-900 p-3 rounded-lg">
-            <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16" data-alt="${p.naam}" style="background-image: ${imageStyle};"></div>
-            <div class="flex-grow min-w-0">
-              <p class="text-base font-medium text-gray-800 dark:text-white truncate">${p.naam}</p>
-              <p class="text-sm text-gray-500 dark:text-gray-400">€${subtotaal.toFixed(2)}</p>
-            </div>
-            <div class="flex items-center gap-2 text-gray-800 dark:text-white">
-              <button type="button" class="btn-icon minus text-lg font-medium flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600" data-key="${key}" aria-label="Verlaag aantal">-</button>
-              <input class="aantal-input text-base font-medium w-6 p-0 text-center bg-transparent focus:outline-none border-none" type="number" value="${aantal}" readonly/>
-              <button type="button" class="btn-icon plus text-lg font-medium flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600" data-key="${key}" aria-label="Verhoog aantal">+</button>
-            </div>
-            <button type="button" class="btn-icon remove text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 ml-2" data-key="${key}" aria-label="Verwijder">
-              <span class="material-symbols-outlined">delete</span>
-            </button>
-          </div>`;
-        cartList.appendChild(li);
-      });
-
-      if (!items || items.length === 0) {
-        const li = document.createElement('li');
-        li.textContent = 'Leeg';
-        cartList.appendChild(li);
-      }
-    }
-
-    async function postJSON(url, payload) {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-      return res.json();
-    }
-
-    // Scannen zonder refresh
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const code = input.value.trim();
-      if (!code) return;
-      const data = await postJSON("/scan-json", { code });
-      errorEl.textContent = data.error ? data.error : "";
-      if (data.error) showToast(data.error, "error");
-      renderList(data.producten);
-      const totaal = (typeof data.totaal === "number") ? data.totaal : parseFloat(data.totaal || 0);
-      totalEl.textContent = `Totaal: €${totaal.toFixed(2)}`;
-      input.value = "";
-    });
-
-    // Event delegation voor +, − en prullenbak
-    cart.addEventListener("click", async (e) => {
-      const btn = e.target.closest(".btn-icon");
-      if (!btn) return;
-      const key = btn.dataset.key;
-      if (!key) return;
-
-      if (btn.classList.contains("plus")) {
-        const data = await postJSON("/update-json", { key, delta: 1 });
-        if (data.error) showToast(data.error, "error");
-        renderList(data.producten);
-        totalEl.textContent = `Totaal: €${Number(data.totaal).toFixed(2)}`;
-      } else if (btn.classList.contains("minus")) {
-        const data = await postJSON("/update-json", { key, delta: -1 });
-        if (data.error) showToast(data.error, "error");
-        renderList(data.producten);
-        totalEl.textContent = `Totaal: €${Number(data.totaal).toFixed(2)}`;
-      } else if (btn.classList.contains("remove")) {
-        const data = await postJSON("/remove-json", { key });
-        if (data.error) showToast(data.error, "error");
-        renderList(data.producten);
-        totalEl.textContent = `Totaal: €${Number(data.totaal).toFixed(2)}`;
-      }
-    });
   });
   </script>
 

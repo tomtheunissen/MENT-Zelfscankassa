@@ -42,3 +42,9 @@ material-symbols-outlined {
   grid-auto-flow: column;
   grid-column-gap: 100px;
 }
+
+.tabs button.active {
+  font-weight: 600;
+  color: #E81A32;
+  border-bottom: #E81A32 2px solid;
+}
