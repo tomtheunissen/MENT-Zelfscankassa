@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from database import get_product
+import sqlite3
 
-
+conn = sqlite3.connect("data/products.db")
+cursor = conn.cursor()
 app = Flask(__name__)
 
 # Tijdelijk winkelmandje in geheugen
@@ -37,6 +39,23 @@ def aggregate_cart(items):
             }
     return list(agg.values())
 
+
+@app.route("/menu_dranken")
+def menu_dranken():
+    """Toon alle dranken uit de database en geef ze door aan de template."""
+    conn = sqlite3.connect("data/products.db")
+    conn.row_factory = sqlite3.Row  # maakt rijen toegankelijk als dict
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url
+        FROM producten
+        WHERE categorie IN ('Warme dranken', 'Koude dranken')
+    """)
+    dranken = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+
+    return render_template("index.html", dranken=dranken)
 
 
 # /minus?code=5008 of form POST, or /minus/5008
@@ -125,10 +144,59 @@ def delete(code=None):
 
 @app.route("/", methods=["GET"])
 def home():
+    # Maak verbinding met de database
+    conn = sqlite3.connect("data/products.db")
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+
+    # Haal alle broodjes op
+    cursor.execute("""
+        SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url
+        FROM producten
+        WHERE categorie = 'Broodjes'
+    """)
+    broodjes = [dict(row) for row in cursor.fetchall()]
+
+    # Haal alle dranken (warme + koude) op
+    cursor.execute("""
+        SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url
+        FROM producten
+        WHERE categorie IN ('Warme dranken', 'Koude dranken')
+    """)
+    dranken = [dict(row) for row in cursor.fetchall()]
+
+    # Haal alle snacks op
+    cursor.execute("""
+        SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url
+        FROM producten
+        WHERE categorie IN ('Snacks warm', 'Snacks koud')
+    """)
+    snacks = [dict(row) for row in cursor.fetchall()]
+
+    # Haal overige producten op
+    cursor.execute("""
+        SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url
+        FROM producten
+        WHERE categorie NOT IN ('Broodjes', 'Warme dranken', 'Koude dranken', 'Snacks warm', 'Snacks koud')
+    """)
+    overige = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+
+    # Winkelwagen en totaal berekenen
     totaal = calculate_total(scanned)
     producten = aggregate_cart(scanned)
-    return render_template("index.html", producten=producten, totaal=totaal, fout=None)
 
+    # Geef alles door aan de template
+    return render_template(
+        "index.html",
+        producten=producten,
+        totaal=totaal,
+        fout=None,
+        broodjes=broodjes,
+        dranken=dranken,
+        snacks=snacks,
+        overige=overige
+    )
 
 @app.route("/scan", methods=["GET", "POST"]) 
 @app.route("/scan/<code>", methods=["GET"]) 
