@@ -307,6 +307,17 @@ def kassa():
         overige=overige
     )
 
+@app.route("/betalen", methods=["GET"])
+def betalen():
+    producten, totaal = aggregate_cart_ordered(scanned)
+    return render_template("betalen.html", producten=producten, totaal=totaal)
+
+# Route voor bevestiging (bevestiging.html) met totaalbedrag
+@app.route("/bevestiging", methods=["GET"])
+def bevestiging():
+    producten, totaal = aggregate_cart_ordered(scanned)
+    return render_template("bevestiging.html", producten=producten, totaal=totaal)
+
 @app.route("/scan", methods=["GET", "POST"]) 
 @app.route("/scan/<code>", methods=["GET"]) 
 def scan(code=None):

@@ -30,7 +30,6 @@
 <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 </head>
 
-
 <body class="bg-background-light dark:bg-background-dark font-display text-[#111518] dark:text-white">
 <div class="flex h-screen">
 <!-- Left Side: Item Selection -->
@@ -173,7 +172,7 @@
   <div class="cart flex flex-col w-2/5 bg-background-light dark:bg-zinc-800 p-6">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Winkelwagen</h2>
-        <form hx-post="{{ url_for('reset') }}" hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" hx-on::after-swap="scrollCartToBottom()">
+      <form hx-post="{{ url_for('reset') }}" hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" hx-on::after-swap="scrollCartToBottom()">
         <button class="knop-afbreken" href="{{ url_for('reset') }}">Afbreken</button>
       </form>
     </div>
@@ -221,9 +220,11 @@
         </div>
       </div>
       <div class="mt-6 flex flex-col gap-4">
-        <button class="w-full flex items-center justify-center rounded-lg h-12 px-6 bg-primary text-white text-base font-bold hover:bg-primary/90 transition-colors">
-          Betalen
-        </button>
+        <a href="/betalen">
+          <button class="w-full flex items-center justify-center rounded-lg h-12 px-6 bg-primary text-white text-base font-bold hover:bg-primary/90 transition-colors">
+            Betalen
+          </button>
+        </a>
         <button class="w-full flex items-center justify-center rounded-lg h-12 px-6 bg-gray-200 dark:bg-zinc-700 text-gray-800 dark:text-white text-base font-bold hover:bg-gray-300 dark:hover:bg-zinc-600 transition-colors">
           Medewerker
         </button>

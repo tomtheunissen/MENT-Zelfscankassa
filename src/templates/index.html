@@ -1,5 +1,77 @@
-<a href="/kassa">
-  <button style="padding: 50px; font-size: 30px;">
-    <header>Start</header>
-  </button>
-</a>
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Zuyd Cafeteria Self-Checkout</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#E81A32",
+              "background-light": "#FFFFFF",
+              "background-dark": "#101a22",
+              "text-primary": "#000000",
+            },
+            fontFamily: {
+              display: ["Public Sans"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-text-primary dark:text-gray-200">
+  </header>
+  <div class="relative flex min-h-screen flex-col group/design-root overflow-x-hidden">
+    <div class="layout-container flex h-full grow flex-col">
+      <div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-5">
+        <div class="layout-content-container flex flex-col max-w-[960px] flex-1 justify-between">
+          <header class="flex justify-center py-8">
+            <div class="w-full max-w-xs h-auto">
+              <img alt="Zuyd Hogeschool Logo" class="w-full h-auto" src="{{ url_for('static', filename='img/ui/zuyd_logo.png')}}"/>
+            </div>
+          </header>
+          <main class="flex flex-col items-center text-center">
+            <div class="flex flex-col gap-6 p-4 items-center">
+              <div class="flex flex-col gap-3">
+                <p class="text-4xl lg:text-5xl font-black leading-tight tracking-[-0.033em] text-text-primary dark:text-white">Welcome to the Zuyd Cafeteria Self-Checkout</p>
+                <p class="text-base lg:text-lg font-normal leading-normal text-text-primary/70 dark:text-gray-400">Begin your self-checkout process by clicking the button below</p>
+              </div>
+              <div class="flex px-4 py-3 justify-center mt-6">
+                <a href="/kassa">
+                  <button class="flex min-w-[120px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 px-8 bg-primary text-white text-xl font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 active:bg-primary/80 transition-colors">
+                    <span class="truncate">Start</span>
+                  </button>
+                </a>
+              </div>
+            </div>
+          </main> 
+          <footer class="flex flex-col gap-6 px-5 py-10 text-center">
+            <div class="flex flex-wrap items-center justify-center gap-6">
+              <a class="text-text-primary/70 dark:text-gray-400 text-base font-normal leading-normal min-w-40 hover:text-primary" href="#">Help</a>
+              <a class="text-text-primary/70 dark:text-gray-400 text-base font-normal leading-normal min-w-40 hover:text-primary" href="#">Information</a>
+            </div>
+            <p class="text-text-primary/70 dark:text-gray-500 text-base font-normal leading-normal">© 2025 Zuyd Hogeschool</p>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+</body></html>
