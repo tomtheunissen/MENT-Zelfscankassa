@@ -1,4 +1,4 @@
-#
+from order import init_orders_schema, save_order
 # Helper: render volledige kassa-pagina zodat HTMX `.cart` kan selecteren
 def render_kassa_page(fout=None):
     producten, totaal = aggregate_cart_ordered(scanned)
@@ -31,6 +31,7 @@ import sqlite3
 conn = sqlite3.connect("data/products.db")
 cursor = conn.cursor()
 app = Flask(__name__)
+init_orders_schema()
 
 # Tijdelijk winkelmandje in geheugen
 scanned = []
@@ -309,7 +310,17 @@ def kassa():
 
 @app.route("/betalen", methods=["GET"])
 def betalen():
+    # Maak geaggregeerde regels en totaalbedrag aan uit het huidige mandje
     producten, totaal = aggregate_cart_ordered(scanned)
+
+    # Proof-of-concept: sla direct op (stil) bij binnenkomst van /betalen
+    try:
+        simple_items = [{"naam": p["naam"], "aantal": int(p.get("aantal", 0) or 0)} for p in producten]
+        save_order(simple_items, totaal)
+    except Exception:
+        # Stil falen zodat de UI niet breekt (optioneel: loggen)
+        pass
+
     return render_template("betalen.html", producten=producten, totaal=totaal)
 
 # Route voor bevestiging (bevestiging.html) met totaalbedrag
