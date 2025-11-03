@@ -1,7 +1,11 @@
 from order import init_orders_schema, save_order
+from uitstoot import km_equiv_from_scanned
+
 # Helper: render volledige kassa-pagina zodat HTMX `.cart` kan selecteren
 def render_kassa_page(fout=None):
     producten, totaal = aggregate_cart_ordered(scanned)
+    # CO2 → km via uitstoot.py
+    km_equiv = km_equiv_from_scanned(scanned)
     conn = sqlite3.connect("data/products.db")
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
@@ -22,7 +26,8 @@ def render_kassa_page(fout=None):
         broodjes=broodjes,
         dranken=dranken,
         snacks=snacks,
-        overige=overige
+        overige=overige,
+        km_equiv=km_equiv  # <-- toegevoegd
     )
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from database import get_product
@@ -282,6 +287,7 @@ def home():
 def kassa():
     # Haal winkelwagen en totaal op
     producten, totaal = aggregate_cart_ordered(scanned)
+    km_equiv = km_equiv_from_scanned(scanned)
     # Laad opnieuw producten voor de categorieën
     conn = sqlite3.connect("data/products.db")
     conn.row_factory = sqlite3.Row
@@ -305,7 +311,8 @@ def kassa():
         broodjes=broodjes,
         dranken=dranken,
         snacks=snacks,
-        overige=overige
+        overige=overige,
+        km_equiv=km_equiv
     )
 
 @app.route("/betalen", methods=["GET"])
@@ -344,6 +351,7 @@ def scan(code=None):
     product = get_product(code)
     if product:
         scanned.append(product)
+        print("DEBUG CO2 laatst toegevoegd:", product.get("co2_uitstoot"))
         k = str(key_of(product))
         if k and k not in cart_order:
             cart_order.append(k)

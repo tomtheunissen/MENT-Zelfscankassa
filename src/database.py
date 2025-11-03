@@ -1,19 +1,28 @@
 import sqlite3 # voor database
 
-def get_product(code):
-    """haalt producten op uit de database"""
-    # start verbinding met database
+import sqlite3
+
+def get_product(code: str):
     conn = sqlite3.connect("data/products.db")
-    cursor = conn.cursor()
-
-    # zoek product via productcode
-    cursor.execute("SELECT naam, prijs FROM producten WHERE code = ?", (code,))
-    row = cursor.fetchone()
-
-    # beëindigt verbinding met database
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+    cur.execute(
+        """
+        SELECT
+            code,
+            categorie,
+            naam,
+            prijs,
+            COALESCE(co2_uitstoot, 0) AS co2_uitstoot,   -- kg per stuk
+            COALESCE(afbeelding_url, '') AS afbeelding_url
+        FROM producten
+        WHERE code = ?
+        LIMIT 1
+        """,
+        (code,),
+    )
+    row = cur.fetchone()
     conn.close()
-
-    # geef product als dict of None wanneer niks gevonden
-    if row:
-        return {"naam": row[0], "prijs": row[1]}
-    return None
+    if not row:
+        return None
+    return dict(row)  # bevat nu co2_uitstoot

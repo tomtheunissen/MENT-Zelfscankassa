@@ -88,7 +88,15 @@
         <a hx-post="{{ url_for('scan') }}" hx-vals='{"code":"{{ p.code }}"}' hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" hx-on::after-swap="scrollCartToBottom()" class="block">
           <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
             <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg"
-                 style="background-image: url('{{ p.afbeelding_url }}')"></div>
+              style="background-image: url('{{ p.afbeelding_url }}')">
+            </div>
+            <div class="flex items-center justify-start gap-0.2 text-green-600 text-sm leading-none">
+              <span class="material-symbols-outlined">eco</span>
+              <span class="material-symbols-outlined">eco</span>
+              <span class="material-symbols-outlined">eco</span>
+              <span class="material-symbols-outlined">eco</span>
+              <span class="material-symbols-outlined">eco</span>
+            </div>
             <div>
               <p class="text-base font-medium text-gray-800 dark:text-white">{{ p.naam }}</p>
               <p class="text-sm text-gray-500 dark:text-gray-400">€{{ '%.2f'|format(p.prijs) }}</p>
@@ -107,7 +115,8 @@
         <a hx-post="{{ url_for('scan') }}" hx-vals='{"code":"{{ p.code }}"}' hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" hx-on::after-swap="scrollCartToBottom()" class="block">
           <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
             <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg"
-                 style="background-image: url('{{ p.afbeelding_url }}')"></div>
+              style="background-image: url('{{ p.afbeelding_url }}')">
+            </div>
             <div>
               <p class="text-base font-medium text-gray-800 dark:text-white">{{ p.naam }}</p>
               <p class="text-sm text-gray-500 dark:text-gray-400">€{{ '%.2f'|format(p.prijs) }}</p>
@@ -126,7 +135,8 @@
         <a hx-post="{{ url_for('scan') }}" hx-vals='{"code":"{{ p.code }}"}' hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" hx-on::after-swap="scrollCartToBottom()" class="block">
           <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
             <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg"
-                 style="background-image: url('{{ p.afbeelding_url }}')"></div>
+              style="background-image: url('{{ p.afbeelding_url }}')">
+            </div>
             <div>
               <p class="text-base font-medium text-gray-800 dark:text-white">{{ p.naam }}</p>
               <p class="text-sm text-gray-500 dark:text-gray-400">€{{ '%.2f'|format(p.prijs) }}</p>
@@ -145,7 +155,8 @@
         <a hx-post="{{ url_for('scan') }}" hx-vals='{"code":"{{ p.code }}"}' hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" hx-on::after-swap="scrollCartToBottom()" class="block">
           <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
             <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg"
-                 style="background-image: url('{{ p.afbeelding_url }}')"></div>
+              style="background-image: url('{{ p.afbeelding_url }}')">
+            </div>
             <div>
               <p class="text-base font-medium text-gray-800 dark:text-white">{{ p.naam }}</p>
               <p class="text-sm text-gray-500 dark:text-gray-400">€{{ '%.2f'|format(p.prijs) }}</p>
@@ -214,6 +225,15 @@
     </div>
     <!-- Price Summary & Actions -->
     <div class="mt-auto pt-6 border-t border-gray-200 dark:border-gray-700">
+      <div class="my-4 text-center">
+        <div class="flex items-center justify-center gap-2 text-green-600">
+          <span class="material-symbols-outlined">eco</span>
+          <p class="text-lg font-semibold">
+            Je aankoop staat gelijk aan {{ '%.1f'|format((km_equiv|default(0)|float)) }} kilometer met de auto
+          </p>
+        </div>
+        <p class="text-sm text-gray-500">Gebaseerd op geschatte CO₂-uitstoot</p>
+      </div>
         <div class="flex justify-between text-xl font-bold">
           <p>Totaal</p>
           <p class="total">Totaal: €{{ '%.2f'|format(totaal) }}</p>
