@@ -63,15 +63,26 @@
                 <p class="text-gray-500 dark:text-gray-400 text-lg font-normal leading-normal mb-8 text-center">Bedankt voor uw aankoop.</p>
                 <div class="w-full bg-background-light dark:bg-background-dark rounded-lg p-6 mb-8">
                     <div class="flex justify-between items-center mb-4">
-                        <p class="text-gray-500 dark:text-gray-400 text-base font-normal">Totaalbedrag:</p>
-                        <p class="text-text-light dark:text-text-dark text-2xl font-bold">€{{ '%.2f'|format(totaal) }}</p>
+                        <p class="text-gray-500 dark:text-gray-400 text-base font-normal flex items-center gap-2">
+                          Milieu impact:
+                        </p>
+                        <div class="flex items-center gap-2">
+                            <p class="text-text-light dark:text-text-dark text-base font-medium">
+                              {{ '%.1f'|format((km_equiv|default(0)|float)) }} km
+                            </p>
+                            <span class="material-symbols-outlined text-green-600">eco</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mb-4">
+                      <p class="text-gray-500 dark:text-gray-400 text-base font-normal">Betaalmiddel:</p>
+                        <div class="flex items-center gap-2">
+                          <p class="text-text-light dark:text-text-dark text-base font-medium">Betaalpas</p>
+                          <span class="material-symbols-outlined text-gray-700">credit_card</span>
+                        </div>
                     </div>
                     <div class="flex justify-between items-center">
-                        <p class="text-gray-500 dark:text-gray-400 text-base font-normal">Betaalmiddel:</p>
-                        <div class="flex items-center gap-2">
-                            <span class="material-symbols-outlined text-text-light dark:text-text-dark">credit_card</span>
-                            <p class="text-text-light dark:text-text-dark text-base font-medium">Betaalpas</p>
-                        </div>
+                      <p class="text-gray-500 dark:text-gray-400 text-base font-normal">Totaalbedrag:</p>
+                      <p class="text-text-light dark:text-text-dark text-2xl font-bold">€{{ '%.2f'|format(totaal) }}</p>
                     </div>
                 </div>
                 <div class="flex flex-col gap-4 w-full">

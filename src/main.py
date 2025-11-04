@@ -1,6 +1,22 @@
 from order import init_orders_schema, save_order
 from uitstoot import km_equiv_from_scanned
 
+# Eenvoudige eco-score op basis van CO₂ in kilogram per stuk (5 = groenst)
+def eco_score_from_kg(kg: float) -> int:
+    try:
+        v = float(kg)
+    except (TypeError, ValueError):
+        return 3
+    if v <= 0.20:
+        return 5
+    if v <= 0.50:
+        return 4
+    if v <= 0.80:
+        return 3
+    if v <= 1.20:
+        return 2
+    return 1
+
 # Helper: render volledige kassa-pagina zodat HTMX `.cart` kan selecteren
 def render_kassa_page(fout=None):
     producten, totaal = aggregate_cart_ordered(scanned)
@@ -9,14 +25,25 @@ def render_kassa_page(fout=None):
     conn = sqlite3.connect("data/products.db")
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
-    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url FROM producten WHERE categorie = 'Broodjes'")
+    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url, COALESCE(co2_uitstoot, 0) AS co2_uitstoot FROM producten WHERE categorie = 'Broodjes'")
     broodjes = [dict(row) for row in cursor.fetchall()]
-    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url FROM producten WHERE categorie IN ('Warme dranken', 'Koude dranken')")
+    for d in broodjes:
+        d["eco_score"] = eco_score_from_kg(d.get("co2_uitstoot"))
+
+    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url, COALESCE(co2_uitstoot, 0) AS co2_uitstoot FROM producten WHERE categorie IN ('Warme dranken', 'Koude dranken')")
     dranken = [dict(row) for row in cursor.fetchall()]
-    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url FROM producten WHERE categorie IN ('Snacks warm', 'Snacks koud')")
+    for d in dranken:
+        d["eco_score"] = eco_score_from_kg(d.get("co2_uitstoot"))
+
+    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url, COALESCE(co2_uitstoot, 0) AS co2_uitstoot FROM producten WHERE categorie IN ('Snacks warm', 'Snacks koud')")
     snacks = [dict(row) for row in cursor.fetchall()]
-    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url FROM producten WHERE categorie NOT IN ('Broodjes', 'Warme dranken', 'Koude dranken', 'Snacks warm', 'Snacks koud')")
+    for d in snacks:
+        d["eco_score"] = eco_score_from_kg(d.get("co2_uitstoot"))
+
+    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url, COALESCE(co2_uitstoot, 0) AS co2_uitstoot FROM producten WHERE categorie NOT IN ('Broodjes', 'Warme dranken', 'Koude dranken', 'Snacks warm', 'Snacks koud')")
     overige = [dict(row) for row in cursor.fetchall()]
+    for d in overige:
+        d["eco_score"] = eco_score_from_kg(d.get("co2_uitstoot"))
     conn.close()
     return render_template(
         "kassa.html",
@@ -293,14 +320,25 @@ def kassa():
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
 
-    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url FROM producten WHERE categorie = 'Broodjes'")
+    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url, COALESCE(co2_uitstoot, 0) AS co2_uitstoot FROM producten WHERE categorie = 'Broodjes'")
     broodjes = [dict(row) for row in cursor.fetchall()]
-    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url FROM producten WHERE categorie IN ('Warme dranken', 'Koude dranken')")
+    for d in broodjes:
+        d["eco_score"] = eco_score_from_kg(d.get("co2_uitstoot"))
+
+    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url, COALESCE(co2_uitstoot, 0) AS co2_uitstoot FROM producten WHERE categorie IN ('Warme dranken', 'Koude dranken')")
     dranken = [dict(row) for row in cursor.fetchall()]
-    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url FROM producten WHERE categorie IN ('Snacks warm', 'Snacks koud')")
+    for d in dranken:
+        d["eco_score"] = eco_score_from_kg(d.get("co2_uitstoot"))
+
+    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url, COALESCE(co2_uitstoot, 0) AS co2_uitstoot FROM producten WHERE categorie IN ('Snacks warm', 'Snacks koud')")
     snacks = [dict(row) for row in cursor.fetchall()]
-    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url FROM producten WHERE categorie NOT IN ('Broodjes', 'Warme dranken', 'Koude dranken', 'Snacks warm', 'Snacks koud')")
+    for d in snacks:
+        d["eco_score"] = eco_score_from_kg(d.get("co2_uitstoot"))
+
+    cursor.execute("SELECT code, categorie, naam, prijs, COALESCE(afbeelding_url, '') AS afbeelding_url, COALESCE(co2_uitstoot, 0) AS co2_uitstoot FROM producten WHERE categorie NOT IN ('Broodjes', 'Warme dranken', 'Koude dranken', 'Snacks warm', 'Snacks koud')")
     overige = [dict(row) for row in cursor.fetchall()]
+    for d in overige:
+        d["eco_score"] = eco_score_from_kg(d.get("co2_uitstoot"))
     conn.close()
 
     return render_template(
@@ -319,6 +357,7 @@ def kassa():
 def betalen():
     # Maak geaggregeerde regels en totaalbedrag aan uit het huidige mandje
     producten, totaal = aggregate_cart_ordered(scanned)
+    km_equiv = km_equiv_from_scanned(scanned)
 
     # Proof-of-concept: sla direct op (stil) bij binnenkomst van /betalen
     try:
@@ -328,7 +367,7 @@ def betalen():
         # Stil falen zodat de UI niet breekt (optioneel: loggen)
         pass
 
-    return render_template("betalen.html", producten=producten, totaal=totaal)
+    return render_template("betalen.html", producten=producten, totaal=totaal, km_equiv=km_equiv)
 
 # Route voor bevestiging (bevestiging.html) met totaalbedrag
 @app.route("/bevestiging", methods=["GET"])

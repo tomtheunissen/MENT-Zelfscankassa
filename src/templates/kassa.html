@@ -43,35 +43,21 @@
             </p>
           </div>
       </div>
-    <!-- Search Bar -->
-    <div class="mb-6">
-      <form hx-post="{{ url_for('scan') }}" hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" class="scan-form" hx-on::after-request="this.reset(); scrollCartToBottom();" hx-on::after-swap="scrollCartToBottom()">
-        <label class="flex flex-col min-w-40 h-12 w-full">
-          <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
-            <div class="text-gray-500 dark:text-gray-400 flex border-none bg-background-light dark:bg-zinc-800 items-center justify-center pl-4 rounded-l-lg border-r-0">
-              <span class="material-symbols-outlined">qr_code_scanner</span>
-            </div>
-            <input type="text" name="code" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-gray-800 dark:text-white focus:outline-0 focus:ring-0 border-none bg-background-light dark:bg-zinc-800 h-full placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 text-base font-normal" placeholder="Scan your item's barcode here" value=""/>
-            <button type="submit" class="toevoegen">Toevoegen</button>
-          </div>
-        </label>
-      </form>
-    </div>
     <!-- Category Navigation -->
 
     <div class="tabs flex border-b border-gray-200 dark:border-gray-700 mb-4">
       <button class="tab active flex items-center gap-2 px-4 py-3 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors" onclick="openTab('broodjes')">
-        <span class="material-symbols-outlined">lunch_dining</span>
+        <span class="material-symbols-outlined">bakery_dining</span>
         Broodjes
       </button>
 
       <button class="tab flex items-center gap-2 px-4 py-3 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors" onclick="openTab('dranken')">
-        <span class="material-symbols-outlined">local_bar</span>
+        <span class="material-symbols-outlined">local_cafe</span>
         Dranken
       </button>
 
       <button class="tab flex items-center gap-2 px-4 py-3 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors" onclick="openTab('snacks')">
-        <span class="material-symbols-outlined">icecream</span>
+        <span class="material-symbols-outlined">cookie</span>
         Snacks
       </button>
 
@@ -81,21 +67,27 @@
       </button>
     </div>
 
-<div id="broodjes" class="tab-content">
+<div id="broodjes" class="tab-content overflow-y-auto">
   <div class="flex-grow overflow-y-auto pr-2">
     <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
       {% for p in broodjes %}
         <a hx-post="{{ url_for('scan') }}" hx-vals='{"code":"{{ p.code }}"}' hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" hx-on::after-swap="scrollCartToBottom()" class="block">
           <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
-            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg"
-              style="background-image: url('{{ p.afbeelding_url }}')">
-            </div>
-            <div class="flex items-center justify-start gap-0.2 text-green-600 text-sm leading-none">
-              <span class="material-symbols-outlined">eco</span>
-              <span class="material-symbols-outlined">eco</span>
-              <span class="material-symbols-outlined">eco</span>
-              <span class="material-symbols-outlined">eco</span>
-              <span class="material-symbols-outlined">eco</span>
+            <img class="w-full aspect-square object-cover rounded-lg"
+                 src="{{ url_for('static', filename=(p.afbeelding_url|default('', true)|replace('src/static/','')) ) }}"
+                 alt="{{ p.naam }}">
+            {% set score = (p.eco_score or 0) | int %}
+            {% set color = 'text-red-600' %}
+            {% if score == 2 %}{% set color = 'text-orange-500' %}
+            {% elif score == 3 %}{% set color = 'text-yellow-500' %}
+            {% elif score == 4 %}{% set color = 'text-green-500' %}
+            {% elif score >= 5 %}{% set color = 'text-green-700' %}{% endif %}
+            <div class="flex items-center justify-start gap-1 text-sm leading-none" aria-label="Eco-score {{score}}/5">
+              {% for i in [1,2,3,4,5] %}
+                {% if i <= score %}
+                  <span class="material-symbols-outlined {{ color }}">eco</span>
+                {% endif %}
+              {% endfor %}
             </div>
             <div>
               <p class="text-base font-medium text-gray-800 dark:text-white">{{ p.naam }}</p>
@@ -108,14 +100,27 @@
   </div>
 </div>
 
-<div id="dranken" class="tab-content hidden">
+<div id="dranken" class="tab-content hidden overflow-y-auto">
   <div class="flex-grow overflow-y-auto pr-2">
     <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
       {% for p in dranken %}
         <a hx-post="{{ url_for('scan') }}" hx-vals='{"code":"{{ p.code }}"}' hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" hx-on::after-swap="scrollCartToBottom()" class="block">
           <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
-            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg"
-              style="background-image: url('{{ p.afbeelding_url }}')">
+            <img class="w-full aspect-square object-cover rounded-lg"
+                 src="{{ url_for('static', filename=(p.afbeelding_url|default('', true)|replace('src/static/','')) ) }}"
+                 alt="{{ p.naam }}">
+            {% set score = (p.eco_score or 0) | int %}
+            {% set color = 'text-red-600' %}
+            {% if score == 2 %}{% set color = 'text-orange-500' %}
+            {% elif score == 3 %}{% set color = 'text-yellow-500' %}
+            {% elif score == 4 %}{% set color = 'text-green-500' %}
+            {% elif score >= 5 %}{% set color = 'text-green-700' %}{% endif %}
+            <div class="flex items-center justify-start gap-1 text-sm leading-none" aria-label="Eco-score {{score}}/5">
+              {% for i in [1,2,3,4,5] %}
+                {% if i <= score %}
+                  <span class="material-symbols-outlined {{ color }}">eco</span>
+                {% endif %}
+              {% endfor %}
             </div>
             <div>
               <p class="text-base font-medium text-gray-800 dark:text-white">{{ p.naam }}</p>
@@ -128,14 +133,27 @@
   </div>
 </div>
 
-<div id="snacks" class="tab-content hidden">
+<div id="snacks" class="tab-content hidden overflow-y-auto">
   <div class="flex-grow overflow-y-auto pr-2">
     <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
       {% for p in snacks %}
         <a hx-post="{{ url_for('scan') }}" hx-vals='{"code":"{{ p.code }}"}' hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" hx-on::after-swap="scrollCartToBottom()" class="block">
           <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
-            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg"
-              style="background-image: url('{{ p.afbeelding_url }}')">
+            <img class="w-full aspect-square object-cover rounded-lg"
+                 src="{{ url_for('static', filename=(p.afbeelding_url|default('', true)|replace('src/static/','')) ) }}"
+                 alt="{{ p.naam }}">
+            {% set score = (p.eco_score or 0) | int %}
+            {% set color = 'text-red-600' %}
+            {% if score == 2 %}{% set color = 'text-orange-500' %}
+            {% elif score == 3 %}{% set color = 'text-yellow-500' %}
+            {% elif score == 4 %}{% set color = 'text-green-500' %}
+            {% elif score >= 5 %}{% set color = 'text-green-700' %}{% endif %}
+            <div class="flex items-center justify-start gap-1 text-sm leading-none" aria-label="Eco-score {{score}}/5">
+              {% for i in [1,2,3,4,5] %}
+                {% if i <= score %}
+                  <span class="material-symbols-outlined {{ color }}">eco</span>
+                {% endif %}
+              {% endfor %}
             </div>
             <div>
               <p class="text-base font-medium text-gray-800 dark:text-white">{{ p.naam }}</p>
@@ -148,14 +166,27 @@
   </div>
 </div>
 
-<div id="other" class="tab-content hidden">
+<div id="other" class="tab-content hidden overflow-y-auto">
   <div class="flex-grow overflow-y-auto pr-2">
     <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
       {% for p in overige %}
         <a hx-post="{{ url_for('scan') }}" hx-vals='{"code":"{{ p.code }}"}' hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" hx-on::after-swap="scrollCartToBottom()" class="block">
           <div class="flex flex-col gap-3 pb-3 rounded-lg bg-background-light dark:bg-zinc-800 p-3 cursor-pointer hover:shadow-lg transition-shadow">
-            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg"
-              style="background-image: url('{{ p.afbeelding_url }}')">
+            <img class="w-full aspect-square object-cover rounded-lg"
+                 src="{{ url_for('static', filename=(p.afbeelding_url|default('', true)|replace('src/static/','')) ) }}"
+                 alt="{{ p.naam }}">
+            {% set score = (p.eco_score or 0) | int %}
+            {% set color = 'text-red-600' %}
+            {% if score == 2 %}{% set color = 'text-orange-500' %}
+            {% elif score == 3 %}{% set color = 'text-yellow-500' %}
+            {% elif score == 4 %}{% set color = 'text-green-500' %}
+            {% elif score >= 5 %}{% set color = 'text-green-700' %}{% endif %}
+            <div class="flex items-center justify-start gap-1 text-sm leading-none" aria-label="Eco-score {{score}}/5">
+              {% for i in [1,2,3,4,5] %}
+                {% if i <= score %}
+                  <span class="material-symbols-outlined {{ color }}">eco</span>
+                {% endif %}
+              {% endfor %}
             </div>
             <div>
               <p class="text-base font-medium text-gray-800 dark:text-white">{{ p.naam }}</p>
@@ -192,7 +223,9 @@
           {% for p in producten %}
             <li data-key="{{ p.key }}" class="lijst-gescand">
               <div class="flex items-center gap-4 bg-white dark:bg-zinc-900 p-3 rounded-lg">
-                <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16" data-alt="Broodje Tonijn" style="background-image: url('{{ p.afbeelding_url }}')"></div>
+                <img class="aspect-square object-cover rounded-lg size-16"
+                     src="{{ url_for('static', filename=(p.afbeelding_url|default('', true)|replace('src/static/','')) ) }}"
+                     alt="{{ p.naam }}">
                 <div class="flex-grow">
                   <p class="text-base font-medium text-gray-800 dark:text-white">{{ p.naam }}</p>
                   <p class="text-sm text-gray-500 dark:text-gray-400">€{{ '%.2f'|format(p.subtotaal) }}</p>
@@ -229,7 +262,7 @@
         <div class="flex items-center justify-center gap-2 text-green-600">
           <span class="material-symbols-outlined">eco</span>
           <p class="text-lg font-semibold">
-            Je aankoop staat gelijk aan {{ '%.1f'|format((km_equiv|default(0)|float)) }} kilometer met de auto
+            Je aankoop staat gelijk aan {{ '%.1f'|format((km_equiv|default(0)|float)) }} kilometer auotrijden
           </p>
         </div>
         <p class="text-sm text-gray-500">Gebaseerd op geschatte CO₂-uitstoot</p>
@@ -240,11 +273,15 @@
         </div>
       </div>
       <div class="mt-6 flex flex-col gap-4">
-        <a href="/betalen">
-          <button class="w-full flex items-center justify-center rounded-lg h-12 px-6 bg-primary text-white text-base font-bold hover:bg-primary/90 transition-colors">
-            Betalen
-          </button>
-        </a>
+        {% set cart_empty = (not producten) %}
+        <button
+          type="button"
+          class="w-full flex items-center justify-center rounded-lg h-12 px-6 text-base font-bold transition-colors {% if cart_empty %}bg-red-500 text-red-100 cursor-not-allowed dark:bg-red-800 dark:text-red-300{% else %}bg-primary text-white hover:bg-primary/90{% endif %}"
+          {% if cart_empty %}disabled aria-disabled="true"{% else %}onclick="window.location.href='{{ url_for('betalen') }}'"{% endif %}
+        >
+          Betalen
+        </button>
+
         <button class="w-full flex items-center justify-center rounded-lg h-12 px-6 bg-gray-200 dark:bg-zinc-700 text-gray-800 dark:text-white text-base font-bold hover:bg-gray-300 dark:hover:bg-zinc-600 transition-colors">
           Medewerker
         </button>
