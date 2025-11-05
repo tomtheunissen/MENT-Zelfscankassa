@@ -1,83 +1,112 @@
 # Zelfscankassa – Project BITEWISE
 
-Een Python-project waarin een digitale zelfscankassa wordt ontwikkeld met een productdatabase en milieuscore.  
-Dit project is onderdeel van de opleiding **HBO-ICT** (Blok 1) en wordt uitgevoerd door **Het G-Team**.
+Een innovatief Python-project gericht op het ontwikkelen van een digitale zelfscankassa met een productdatabase en milieuscore, ontworpen om wachtrijen in de kantine te verminderen en duurzame keuzes te stimuleren.
 
 ---
 
-## Beschrijving
-Het doel van dit project is om een proof-of-concept te maken van een zelfscansysteem dat:
-- producten kan scannen en prijzen optelt  
-- de CO₂-impact of productcategorie toont om duurzame keuzes te stimuleren  
-- wachtrijen in de cafetaria verkort en werkdruk voor personeel verlaagt  
+## Aanleiding & Doelstelling
 
+In de kantine van Hogeschool Zuyd ontstaan vaak lange wachtrijen, wat leidt tot ontevredenheid onder studenten en personeel. Dit project richt zich op het ontwikkelen van een proof-of-concept zelfscankassa die het afrekenproces versnelt en tegelijkertijd inzicht geeft in de CO₂-impact van producten. Hiermee willen we bijdragen aan een duurzamere en efficiëntere kantineomgeving.
 
-## Team
+---
 
-Ons projectteam bestaat uit de volgende leden:
+## Projectresultaat
+
+Het resultaat is een werkende zelfscankassa-applicatie met de volgende kenmerken:
+- Producten scannen en prijzen automatisch optellen
+- Tonen van CO₂-impact per product om duurzame keuzes te stimuleren
+- Backend gebouwd met Flask en een gekoppelde productdatabase
+- Gehost op Azure voor schaalbaarheid en betrouwbaarheid
+- Prototype ontwikkeld binnen 10 weken
+
+---
+
+## Team & Rollen
 
 | Naam                 | Rol                         |
 |----------------------|-----------------------------|
-| **Roy Geerkens**     | Teamleider                  |
-| **Tom Theunissen**   | Tijdsbewaker & Scrummaster  |
-| **Winston Dang**     | Notulist                    |
-| **Niels Theunissen** | Teamlid                     |
+| Roy Geerkens         | Teamleider                  |
+| Tom Theunissen       | Tijdsbewaker & Scrummaster  |
+| Winston Dang         | Notulist                    |
+| Niels Theunissen     | Teamlid                     |
 
+---
 
-## Categorieën in de productendatabase
+## Projectstructuur
 
-Om de producten in de zelfscankassa overzichtelijk en herkenbaar te maken, zijn ze onderverdeeld in vaste categorieën.  
-Dit maakt het eenvoudiger voor gebruikers én zorgt ervoor dat we per categorie ook een gemiddelde milieuscore kunnen tonen.
+Het project is georganiseerd volgens een agile aanpak met wekelijkse sprints en regelmatige scrummomenten. De samenwerking wordt vastgelegd in een samenwerkingscontract om heldere afspraken te waarborgen.
 
+---
 
-### Dranken
-- **Warme dranken** – koffie, thee, chocomel
-- **Koude dranken** – water, cola, smoothies
+## Technologie & Architectuur
 
-### Eten
-- **Broodjes** – broodje kaas, broodje gezond, etc.
-- **Snacks warm** – frikandel, kroket, kaassoufflé
-- **Snacks koud** – salades, fruit, yoghurt
-- **Maaltijden** – soep, pasta, rijstgerechten
-- **Zoet & Gebak** – koek, muffins, repen
+- **Backend:** Flask-webframework voor API en serverlogica  
+- **Database:** Productdatabase met categorieën en milieuscores  
+- **Hosting:** Azure cloudplatform voor deployment en beheer  
+- **Frontend:** Eenvoudige interface voor het scannen en afrekenen  
+- **Milieuscore:** CO₂-impact per product inzichtelijk gemaakt  
 
-### Overig
-- **Overige producten** – kauwgom, snacks verpakt, etc.
+---
 
-<br><br>
+## Installatie & Gebruik
 
-## Project starten
+1. Maak een virtuele omgeving aan en activeer deze:
+   - Mac/Linux:
+     ```bash
+     python -m venv venv
+     source venv/bin/activate
+     ```
+   - Windows (Powershell):
+     ```bash
+     python -m venv venv
+     venv\Scripts\Activate.ps1
+     ```
+   - Windows (CMD):
+     ```bash
+     python -m venv venv
+     venv\Scripts\activate.bat
+     ```
+2. Installeer benodigde packages:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Start de applicatie:
+   ```bash
+   python -m src.main
+   ```
 
-**Virtuele omgeving aanmaken en activeren**
+---
 
-Maak eerst een virtuele omgeving aan om de afhankelijkheden gescheiden te houden, en activeer deze vervolgens:
+## Kwaliteit & Risico’s
 
-**Mac/Linux**
-```bash
-python -m venv venv
-source venv/bin/activate
-```
-**Windows (Powershell)**
-```bash
-python -m venv venv
-venv\Scripts\Activate.ps1
-```
-**Windows (CMD)**
-```bash
-python -m venv venv
-venv\Scripts\activate.bat
-```
-<br>
+- **Kwaliteit:** Regelmatige code reviews en tests waarborgen de stabiliteit.  
+- **Risico’s:** Beperkingen in tijd (10 weken) en afhankelijkheden van externe hosting (Azure) kunnen invloed hebben op het eindresultaat.  
+- **Mitigatie:** Strakke planning, duidelijke communicatie en het gebruik van bewezen technologieën.
 
-**Benodigde packages installeren**
-```bash
-pip install -r requirements.txt
-```
+---
 
-<br>
+## English Summary
 
-**Programma starten**
+# Self-Checkout System – Project BITEWISE
 
-```bash
-python -m src.main
-```
+An innovative Python project aimed at developing a digital self-checkout system with a product database and environmental score, designed to reduce queues in the cafeteria and promote sustainable choices.
+
+**Background & Objective:**  
+Long queues at the Zuyd University cafeteria cause dissatisfaction. This project creates a proof-of-concept self-checkout system that speeds up payments and provides CO₂ impact insights per product.
+
+**Project Outcome:**  
+A working application that scans products, sums prices, shows CO₂ impact, uses a Flask backend, and is deployed on Azure. Developed within 10 weeks.
+
+**Team & Roles:**  
+Roy Geerkens (Team Leader), Tom Theunissen (Timekeeper & Scrum Master), Winston Dang (Secretary), Niels Theunissen (Team Member).
+
+**Technology & Architecture:**  
+Flask backend, product database with categories and environmental scores, Azure hosting, simple frontend interface.
+
+**Installation & Usage:**  
+Create and activate a virtual environment, install dependencies, and run the application.
+
+**Quality & Risks:**  
+Code reviews and testing ensure stability; time constraints and hosting dependencies are managed through planning and communication.
+
+This project demonstrates a practical solution to improve efficiency and sustainability in a real-world setting.
