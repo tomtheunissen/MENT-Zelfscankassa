@@ -61,35 +61,33 @@ def init_db():
         ("5102", "Broodjes", "Panini tomaat mozarella", 3.90, 0.80, "src/static/img/products/broodjes/panini_tomaat_mozarella.webp"),
         ("5103", "Broodjes", "Panini big mac", 3.90, 1.50, "src/static/img/products/broodjes/panini_big_mac.webp"),
 
-        # Snacks warm
-        ("6001", "Snacks warm", "Frikandel", 1.00, 0.70, "src/static/img/products/snacks_warm/frikandel.webp"),
-        ("6002", "Snacks warm", "Kroket", 1.20, 0.70, "src/static/img/products/snacks_warm/kroket.webp"),
-        ("6003", "Snacks warm", "Kaassoufflé", 1.50, 0.70, "src/static/img/products/snacks_warm/kaassouffle.webp"),
-        ("6004", "Snacks warm", "Frikandelbroodje", 1.90, 0.90, "src/static/img/products/snacks_warm/frikandelbroodje.webp"),
-        ("6005", "Snacks warm", "Saucijzenbroodje", 1.80, 1.00, "src/static/img/products/snacks_warm/saucijzenbroodje.webp"),
-        ("6006", "Snacks warm", "Kaasbroodje", 1.90, 0.80, "src/static/img/products/snacks_warm/kaasbroodje.webp"),
-
         # Snacks koud
         ("7001", "Snacks koud", "Appel", 0.70, 0.05, "src/static/img/products/snacks_koud/appel.webp"),
         ("7002", "Snacks koud", "Peer", 0.70, 0.05, "src/static/img/products/snacks_koud/peer.webp"),
         ("7003", "Snacks koud", "Banaan", 0.70, 0.08, "src/static/img/products/snacks_koud/banaan.webp"),
-        ("7004", "Snacks koud", "Yoghurt aardbei", 1.20, 0.40, "src/static/img/products/snacks_koud/yoghurt_aardbei.webp"),
-        ("7005", "Snacks koud", "Yoghurt bosbes", 1.20, 0.40, "src/static/img/products/snacks_koud/yoghurt_bosbes.webp"),
-        ("7006", "Snacks koud", "Yoghurt perzik", 1.20, 0.40, "src/static/img/products/snacks_koud/yoghurt_perzik.webp"),
+        ("7004", "Snacks koud", "Muffin chocolade", 1.60, 0.50, "src/static/img/products/zoet_gebak/muffin_chocolade.webp"),
+        ("7005", "Snacks koud", "Muffin aardbei", 1.60, 0.45, "src/static/img/products/zoet_gebak/muffin_aardbei.webp"),
+        ("7006", "Snacks koud", "Brownie", 2.40, 0.60, "src/static/img/products/zoet_gebak/brownie.webp"),
+        ("7007", "Snacks koud", "Koekje wit", 1.60, 0.25, "src/static/img/products/zoet_gebak/koekje_wit.webp"),
+        ("7008", "Snacks koud", "Koekje puur", 1.60, 0.25, "src/static/img/products/zoet_gebak/koekje_puur.webp"),
+        ("7009", "Snacks koud", "Appeltaart", 3.20, 0.60, "src/static/img/products/zoet_gebak/appeltaart.webp"),
+        ("7010", "Snacks koud", "Yoghurt aardbei", 1.20, 0.40, "src/static/img/products/snacks_koud/yoghurt_aardbei.webp"),
+        ("7011", "Snacks koud", "Yoghurt bosbes", 1.20, 0.40, "src/static/img/products/snacks_koud/yoghurt_bosbes.webp"),
+        ("7012", "Snacks koud", "Yoghurt perzik", 1.20, 0.40, "src/static/img/products/snacks_koud/yoghurt_perzik.webp"),
+
+        # Snacks warm
+        ("8001", "Snacks warm", "Frikandel", 1.00, 0.70, "src/static/img/products/snacks_warm/frikandel.webp"),
+        ("8002", "Snacks warm", "Kroket", 1.20, 0.70, "src/static/img/products/snacks_warm/kroket.webp"),
+        ("8003", "Snacks warm", "Kaassoufflé", 1.50, 0.70, "src/static/img/products/snacks_warm/kaassouffle.webp"),
+        ("8004", "Snacks warm", "Frikandelbroodje", 1.90, 0.90, "src/static/img/products/snacks_warm/frikandelbroodje.webp"),
+        ("8005", "Snacks warm", "Saucijzenbroodje", 1.80, 1.00, "src/static/img/products/snacks_warm/saucijzenbroodje.webp"),
+        ("8006", "Snacks warm", "Kaasbroodje", 1.90, 0.80, "src/static/img/products/snacks_warm/kaasbroodje.webp"),
 
         # Maaltijden — soep per kom
-        ("8001", "Maaltijden", "Tomatensoep", 2.90, 0.30, "src/static/img/products/maaltijden/tomatensoep.webp"),
-        ("8002", "Maaltijden", "Groentesoep", 2.90, 0.30, "src/static/img/products/maaltijden/groentesoep.webp"),
-        ("8003", "Maaltijden", "Pompoensoep", 2.90, 0.35, "src/static/img/products/maaltijden/pompoensoep.webp"),
-        ("8004", "Maaltijden", "Kippensoep", 2.90, 0.50, "src/static/img/products/maaltijden/kippensoep.webp"),
-
-        # Zoet & gebak — per stuk
-        ("9001", "Zoet & gebak", "Muffin chocolade", 1.60, 0.50, "src/static/img/products/zoet_gebak/muffin_chocolade.webp"),
-        ("9002", "Zoet & gebak", "Muffin aardbei", 1.60, 0.45, "src/static/img/products/zoet_gebak/muffin_aardbei.webp"),
-        ("9003", "Zoet & gebak", "Brownie", 2.40, 0.60, "src/static/img/products/zoet_gebak/brownie.webp"),
-        ("9004", "Zoet & gebak", "Koekje wit", 1.60, 0.25, "src/static/img/products/zoet_gebak/koekje_wit.webp"),
-        ("9005", "Zoet & gebak", "Koekje puur", 1.60, 0.25, "src/static/img/products/zoet_gebak/koekje_puur.webp"),
-        ("9006", "Zoet & gebak", "Appeltaart", 3.20, 0.60, "src/static/img/products/zoet_gebak/appeltaart.webp"),
+        ("9001", "Maaltijden", "Tomatensoep", 2.90, 0.30, "src/static/img/products/maaltijden/tomatensoep.webp"),
+        ("9002", "Maaltijden", "Groentesoep", 2.90, 0.30, "src/static/img/products/maaltijden/groentesoep.webp"),
+        ("9003", "Maaltijden", "Pompoensoep", 2.90, 0.35, "src/static/img/products/maaltijden/pompoensoep.webp"),
+        ("9004", "Maaltijden", "Kippensoep", 2.90, 0.50, "src/static/img/products/maaltijden/kippensoep.webp"),
     ]
     # voegt de producten toe aan de databse
     cursor.executemany("INSERT OR IGNORE INTO producten VALUES (?, ?, ?, ?, ?, ?)", producten)

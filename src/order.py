@@ -3,12 +3,9 @@
 Slaat bij elke betaling één record op in data/orders.db met:
 - id (AUTOINCREMENT) — ordernummer
 - created_at (TEXT, ISO 8601)
-- items_json (TEXT) — JSON-lijst met {naam, aantal}
-- totaal (REAL)
-
-Gebruik: in main.py roep je bij /betalen:
-    items = [{"naam": p["naam"], "aantal": p["aantal"]} for p in producten]
-    order_id = save_order(items, totaal)
+- items (TEXT) — komma-gescheiden namen
+- co2_info (TEXT) — CO2-equivalent (bijv. "0.63 kg ~1.2 km")
+- totaalbedrag (REAL)
 """
 from __future__ import annotations
 
@@ -30,34 +27,75 @@ def _connect() -> sqlite3.Connection:
     return conn
 
 def init_orders_schema() -> None:
-    """Maak de tabel 'orders' aan als die er nog niet is."""
+    """Maak/upgrade de tabel 'orders' met vaste kolomvolgorde."""
     with _connect() as conn:
-        conn.execute(
-            """
-            CREATE TABLE IF NOT EXISTS orders (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                created_at TEXT NOT NULL,
-                items_json TEXT NOT NULL,
-                totaal REAL NOT NULL
+        cur = conn.execute("PRAGMA table_info(orders)")
+        cols = [row[1] for row in cur.fetchall()]  # [cid, name, ...]
+        if not cols:
+            # Vers nieuwe tabel aanmaken met juiste volgorde
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS orders (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    created_at TEXT NOT NULL,
+                    items TEXT NOT NULL,
+                    co2_info TEXT NOT NULL,
+                    totaalbedrag REAL NOT NULL
+                )
+                """
             )
-            """
-        )
+            return
+        # Bestaande tabel: check of co2_info ontbreekt of volgorde afwijkt
+        desired = ["id", "created_at", "items", "co2_info", "totaalbedrag"]
+        if cols != desired:
+            # Maak nieuwe tabel met juiste schema en kopieer data
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS orders_new (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    created_at TEXT NOT NULL,
+                    items TEXT NOT NULL,
+                    co2_info TEXT NOT NULL,
+                    totaalbedrag REAL NOT NULL
+                )
+                """
+            )
+            # Bepaal welke kolommen bestaan en kopieer met defaults
+            has_items = "items" in cols or "items_json" in cols
+            has_total = "totaalbedrag" in cols or "totaal" in cols
+            items_col = "items" if "items" in cols else ("items_json" if "items_json" in cols else "''")
+            total_col = "totaalbedrag" if "totaalbedrag" in cols else ("totaal" if "totaal" in cols else "0.0")
+            # Zet ontbrekende co2_info als lege string
+            conn.execute(
+                f"INSERT INTO orders_new (id, created_at, items, co2_info, totaalbedrag) "
+                f"SELECT id, created_at, {items_col}, '' as co2_info, {total_col} FROM orders"
+            )
+            conn.execute("DROP TABLE orders")
+            conn.execute("ALTER TABLE orders_new RENAME TO orders")
 
-def save_order(items: List[Dict], totaal: float) -> Optional[int]:
+def save_order(items: List[Dict], totaal: float, co2_text: str | None = None) -> Optional[int]:
     """Sla een order op en retourneer het ordernummer (id).
 
     items: lijst met dicts: {naam: str, aantal: int}
     totaal: totaalbedrag (float)
+    co2_text: optionele string met CO2-info
 
     All-or-nothing via transaction context.
     """
     if not items:
         return None
     created_at = _dt.datetime.now().isoformat(timespec="seconds")
-    items_json = json.dumps(items, ensure_ascii=False)
+    # Expand items into repeated names
+    expanded_items = []
+    for item in items:
+        naam = item.get("naam")
+        aantal = int(item.get("aantal", 1))
+        for _ in range(aantal):
+            expanded_items.append(naam)
+    items_text = ", ".join(expanded_items)
     with _connect() as conn:
         cur = conn.execute(
-            "INSERT INTO orders (created_at, items_json, totaal) VALUES (?, ?, ?)",
-            (created_at, items_json, float(totaal) or 0.0),
+            "INSERT INTO orders (created_at, items, co2_info, totaalbedrag) VALUES (?, ?, ?, ?)",
+            (created_at, items_text, (co2_text or ""), round(float(totaal) or 0.0, 2)),
         )
         return cur.lastrowid

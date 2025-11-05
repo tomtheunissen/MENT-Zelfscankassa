@@ -353,6 +353,12 @@ def kassa():
         km_equiv=km_equiv
     )
 
+@app.route("/afwachten", methods=["GET"])
+def afwachten():
+    # Toon een tussenpagina en stuur na 5s automatisch door naar /betalen
+    return render_template("afwachten.html")
+
+
 @app.route("/betalen", methods=["GET"])
 def betalen():
     # Maak geaggregeerde regels en totaalbedrag aan uit het huidige mandje
@@ -362,9 +368,17 @@ def betalen():
     # Proof-of-concept: sla direct op (stil) bij binnenkomst van /betalen
     try:
         simple_items = [{"naam": p["naam"], "aantal": int(p.get("aantal", 0) or 0)} for p in producten]
-        save_order(simple_items, totaal)
+        # Totale CO2 in kg over alle losse items
+        co2_total_kg = 0.0
+        for item in scanned:
+            try:
+                co2_total_kg += float(item.get("co2_uitstoot") or 0)
+            except (TypeError, ValueError):
+                continue
+        # Voeg km-equivalent toe als context
+        co2_text = f"{round(co2_total_kg, 2)} kg ~{round(km_equiv, 1)} km"
+        save_order(simple_items, totaal, co2_text)
     except Exception:
-        # Stil falen zodat de UI niet breekt (optioneel: loggen)
         pass
 
     return render_template("betalen.html", producten=producten, totaal=totaal, km_equiv=km_equiv)

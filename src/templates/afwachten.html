@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Voltooien</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<style type="text/tailwindcss">
+        :root {
+            --primary-accent: #E81A32;
+            --text-color: #000000;
+        }
+        body {
+            font-family: 'Public Sans', sans-serif;
+            background-color: #FFFFFF;
+            color: var(--text-color);
+        }
+    </style>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 48
+        }
+    </style>
+</head>
+<body class="font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden bg-white">
+<div class="layout-container flex h-full grow flex-col">
+<main class="flex flex-1 items-center justify-center py-12 px-4">
+<div class="flex w-full max-w-lg flex-col items-center justify-center rounded-xl bg-white p-6 text-center shadow-lg sm:p-10">
+<div class="mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-red-100">
+<span class="material-symbols-outlined text-5xl text-[--primary-accent]">arrow_downward</span>
+</div>
+<h1 class="text-3xl font-bold tracking-tight text-[--text-color] md:text-4xl">Betaling voltooien</h1>
+<p class="mt-3 text-base text-[--text-color]">Volg de instructies op de betaalterminal</p>
+</div>
+</main>
+</div>
+</div>
+
+</body>
+<script>
+  // Stuur automatisch door naar betalen na 5 seconden
+  setTimeout(function() {
+    window.location.href = "{{ url_for('betalen') }}";
+  }, 5000);
+</script>
+</html>

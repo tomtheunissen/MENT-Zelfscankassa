@@ -276,8 +276,8 @@
         {% set cart_empty = (not producten) %}
         <button
           type="button"
-          class="w-full flex items-center justify-center rounded-lg h-12 px-6 text-base font-bold transition-colors {% if cart_empty %}bg-red-500 text-red-100 cursor-not-allowed dark:bg-red-800 dark:text-red-300{% else %}bg-primary text-white hover:bg-primary/90{% endif %}"
-          {% if cart_empty %}disabled aria-disabled="true"{% else %}onclick="window.location.href='{{ url_for('betalen') }}'"{% endif %}
+          class="w-full flex items-center justify-center rounded-lg h-12 px-6 text-base font-bold transition-colors {% if cart_empty %}bg-red-300 text-red-100 cursor-not-allowed dark:bg-red-800 dark:text-red-300{% else %}bg-primary text-white hover:bg-primary/90{% endif %}"
+          {% if cart_empty %}disabled aria-disabled="true"{% else %}onclick="window.location.href='{{ url_for('afwachten') }}'"{% endif %}
         >
           Betalen
         </button>
