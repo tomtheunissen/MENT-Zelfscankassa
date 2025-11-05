@@ -1,112 +1,210 @@
 # Zelfscankassa – Project BITEWISE
 
-Een innovatief Python-project gericht op het ontwikkelen van een digitale zelfscankassa met een productdatabase en milieuscore, ontworpen om wachtrijen in de kantine te verminderen en duurzame keuzes te stimuleren.
+Een innovatief Python-project voor een digitale zelfscankassa met productdatabase en milieuscore. Gericht op het verminderen van wachtrijen en stimuleren van duurzame keuzes in de kantine.
 
 ---
 
 ## Aanleiding & Doelstelling
-
-In de kantine van Hogeschool Zuyd ontstaan vaak lange wachtrijen, wat leidt tot ontevredenheid onder studenten en personeel. Dit project richt zich op het ontwikkelen van een proof-of-concept zelfscankassa die het afrekenproces versnelt en tegelijkertijd inzicht geeft in de CO₂-impact van producten. Hiermee willen we bijdragen aan een duurzamere en efficiëntere kantineomgeving.
+- Lange wachtrijen in de kantine van Hogeschool Zuyd, vooral tijdens piekuren.
+- Verhoogde werkdruk en verminderde klanttevredenheid.
+- Groeiend belang van duurzaamheid en bewustwording van CO₂-impact.
+- Opdracht: een proof-of-concept zelfscankassa ontwikkelen die:
+  - Het afrekenproces versnelt.
+  - Inzicht geeft in milieubelasting van producten.
+- Doel: een efficiëntere, duurzamere en klantvriendelijkere kantineomgeving.
 
 ---
 
 ## Projectresultaat
-
-Het resultaat is een werkende zelfscankassa-applicatie met de volgende kenmerken:
-- Producten scannen en prijzen automatisch optellen
-- Tonen van CO₂-impact per product om duurzame keuzes te stimuleren
-- Backend gebouwd met Flask en een gekoppelde productdatabase
-- Gehost op Azure voor schaalbaarheid en betrouwbaarheid
-- Prototype ontwikkeld binnen 10 weken
+- Werkende zelfscankassa-applicatie met eenvoudige scaninterface.
+- Producten automatisch toegevoegd aan digitaal mandje.
+- Realtime bijwerken van totaalprijs en CO₂-impact per product.
+- Productinformatie met categorieën en milieuscores in gekoppelde database.
+- Backend gebouwd met Flask, verzorgt API-routes voor product- en mandjebeheer.
+- Geen daadwerkelijke betalingen in deze fase, maar voorbereid op toekomstige integratie.
+- Gehost op Azure voor schaalbaarheid en betrouwbaarheid.
+- Prototype ontwikkeld binnen 10 weken.
 
 ---
 
 ## Team & Rollen
-
-| Naam                 | Rol                         |
-|----------------------|-----------------------------|
-| Roy Geerkens         | Teamleider                  |
-| Tom Theunissen       | Tijdsbewaker & Scrummaster  |
-| Winston Dang         | Notulist                    |
-| Niels Theunissen     | Teamlid                     |
+| Naam             | Rol                            |
+|------------------|--------------------------------|
+| Roy Geerkens     | Teamleider                     |
+| Tom Theunissen   | Hoofdontwikkelaar & Scrummaster|
+| Winston Dang     | Notulist                       |
+| Niels Theunissen | Teamlid                        |
 
 ---
 
 ## Projectstructuur
-
-Het project is georganiseerd volgens een agile aanpak met wekelijkse sprints en regelmatige scrummomenten. De samenwerking wordt vastgelegd in een samenwerkingscontract om heldere afspraken te waarborgen.
+- Agile aanpak met wekelijkse Scrum-sprints en scrummomenten.
+- Gebruik van Trello voor taakbeheer en sprintplanning.
+- Go/No-Go momenten voor beslissingen en voortgangsevaluatie.
+- Heldere communicatie en efficiënte taakverdeling binnen het team.
 
 ---
 
 ## Technologie & Architectuur
-
-- **Backend:** Flask-webframework voor API en serverlogica  
-- **Database:** Productdatabase met categorieën en milieuscores  
-- **Hosting:** Azure cloudplatform voor deployment en beheer  
-- **Frontend:** Eenvoudige interface voor het scannen en afrekenen  
-- **Milieuscore:** CO₂-impact per product inzichtelijk gemaakt  
-
----
-
-## Installatie & Gebruik
-
-1. Maak een virtuele omgeving aan en activeer deze:
-   - Mac/Linux:
-     ```bash
-     python -m venv venv
-     source venv/bin/activate
-     ```
-   - Windows (Powershell):
-     ```bash
-     python -m venv venv
-     venv\Scripts\Activate.ps1
-     ```
-   - Windows (CMD):
-     ```bash
-     python -m venv venv
-     venv\Scripts\activate.bat
-     ```
-2. Installeer benodigde packages:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Start de applicatie:
-   ```bash
-   python -m src.main
-   ```
+- **Backend:** Flask-webframework met API-routes voor product- en mandjebeheer.
+- **Database:** Productdatabase met categorieën en milieuscores; lokaal met optie tot Azure SQL.
+- **Mappenstructuur:**  
+  - `src/`: hoofdcode en business logic  
+  - `templates/`: HTML-frontend  
+  - `static/`: CSS, JavaScript, afbeeldingen  
+  - `database/`: datasets en scripts  
+- **Hosting:** Azure cloudplatform met automatische scaling en monitoring.
+- **Frontend:** eenvoudige, gebruiksvriendelijke interface met realtime updates.
+- **Uitbreidingen:** toekomstige integratie van Azure SQL, betaalmodules en rapportages.
 
 ---
 
 ## Kwaliteit & Risico’s
-
-- **Kwaliteit:** Regelmatige code reviews en tests waarborgen de stabiliteit.  
-- **Risico’s:** Beperkingen in tijd (10 weken) en afhankelijkheden van externe hosting (Azure) kunnen invloed hebben op het eindresultaat.  
-- **Mitigatie:** Strakke planning, duidelijke communicatie en het gebruik van bewezen technologieën.
+- **Kwaliteit:**  
+  - Intuïtieve interface voor snel leren en gebruik.  
+  - Bescherming van gebruikersdata en veilige communicatie.  
+  - Snelle respons en minimale laadtijden, ook bij veel producten.  
+- **Risico’s:**  
+  - Afhankelijkheid van stabiele internetverbinding.  
+  - Mogelijke inconsistenties tussen database en frontend.  
+  - Fouten bij scannen of onduidelijke feedback kunnen frustreren.  
+- **Mitigatie:**  
+  - Strakke planning en duidelijke communicatie.  
+  - Regelmatige code reviews en uitgebreide tests.  
+  - Gebruik van bewezen technologieën.
 
 ---
 
-## English Summary
+## Installatie & Gebruik
+1. Virtuele omgeving aanmaken en activeren:  
+   - Mac/Linux:  
+     ```bash
+     python -m venv venv
+     source venv/bin/activate
+     ```  
+   - Windows (Powershell):  
+     ```bash
+     python -m venv venv
+     venv\Scripts\Activate.ps1
+     ```  
+   - Windows (CMD):  
+     ```bash
+     python -m venv venv
+     venv\Scripts\activate.bat
+     ```
+2. Packages installeren:  
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Applicatie starten:  
+   ```bash
+   python -m src.main
+   ```
+
+
+---
 
 # Self-Checkout System – Project BITEWISE
 
-An innovative Python project aimed at developing a digital self-checkout system with a product database and environmental score, designed to reduce queues in the cafeteria and promote sustainable choices.
+An innovative Python project for a digital self-checkout system with a product database and environmental score.  
+Focused on reducing queues and promoting sustainable choices in the cafeteria.
 
-**Background & Objective:**  
-Long queues at the Zuyd University cafeteria cause dissatisfaction. This project creates a proof-of-concept self-checkout system that speeds up payments and provides CO₂ impact insights per product.
+---
 
-**Project Outcome:**  
-A working application that scans products, sums prices, shows CO₂ impact, uses a Flask backend, and is deployed on Azure. Developed within 10 weeks.
+## Background & Objectives
+- Long queues in the Zuyd University cafeteria, especially during peak hours  
+- Increased workload and reduced customer satisfaction  
+- Growing importance of sustainability and CO₂ awareness  
+- Assignment: develop a proof-of-concept self-checkout system that:  
+  - Speeds up the checkout process  
+  - Provides insight into the environmental impact of products  
+- Goal: create a more efficient, sustainable, and customer-friendly cafeteria environment
 
-**Team & Roles:**  
-Roy Geerkens (Team Leader), Tom Theunissen (Timekeeper & Scrum Master), Winston Dang (Secretary), Niels Theunissen (Team Member).
+---
 
-**Technology & Architecture:**  
-Flask backend, product database with categories and environmental scores, Azure hosting, simple frontend interface.
+## Project Outcome
+- Functional self-checkout application with a simple scan interface  
+- Products automatically added to a digital basket  
+- Real-time updates of total price and CO₂ impact per product  
+- Product information with categories and environmental scores stored in a linked database  
+- Backend built with Flask, providing API routes for product and basket management  
+- No actual payment processing in this phase, but architecture supports future integration  
+- Hosted on Azure for scalability and reliability  
+- Prototype developed within 10 weeks
 
-**Installation & Usage:**  
-Create and activate a virtual environment, install dependencies, and run the application.
+---
 
-**Quality & Risks:**  
-Code reviews and testing ensure stability; time constraints and hosting dependencies are managed through planning and communication.
+## Team & Roles
+| Name             | Role                         |
+|------------------|------------------------------|
+| Roy Geerkens     | Team Leader                  |
+| Tom Theunissen   | Lead Developer & Scrum Master|
+| Winston Dang     | Secretary                    |
+| Niels Theunissen | Timekeeper                   |
 
-This project demonstrates a practical solution to improve efficiency and sustainability in a real-world setting.
+---
+
+## Project Structure
+- Agile approach with weekly Scrum sprints and stand-up meetings  
+- Trello used for task management and sprint planning  
+- Go/No-Go moments for key decisions and progress evaluations  
+- Clear communication and efficient task distribution within the team
+
+---
+
+## Technology & Architecture
+- **Backend:** Flask web framework with API routes for product and basket management  
+- **Database:** Product database containing categories and environmental scores; local setup with an option for Azure SQL  
+- **Directory structure:**  
+  - `src/`: main application code and business logic  
+  - `templates/`: HTML frontend  
+  - `static/`: CSS, JavaScript, and image files  
+  - `database/`: datasets and database scripts  
+- **Hosting:** Azure cloud platform with automatic scaling and monitoring  
+- **Frontend:** simple, user-friendly interface with real-time updates  
+- **Future expansions:** integration with Azure SQL, payment modules, and reporting features
+
+---
+
+## Quality & Risks
+- **Quality:**  
+  - Intuitive interface for quick learning and easy use  
+  - Protection of user data and secure backend communication  
+  - Fast response times and minimal load times, even with large product lists  
+- **Risks:**  
+  - Dependency on a stable internet connection  
+  - Possible inconsistencies between database and frontend display  
+  - Scanning errors or unclear feedback may cause frustration  
+- **Mitigation:**  
+  - Tight planning and clear communication  
+  - Regular code reviews and thorough testing  
+  - Use of proven, reliable technologies
+
+---
+
+## Installation & Usage
+1. Create and activate a virtual environment:  
+   - **Mac/Linux:**  
+     ```bash
+     python -m venv venv
+     source venv/bin/activate
+     ```  
+   - **Windows (PowerShell):**  
+     ```bash
+     python -m venv venv
+     venv\Scripts\Activate.ps1
+     ```  
+   - **Windows (CMD):**  
+     ```bash
+     python -m venv venv
+     venv\Scripts\activate.bat
+     ```
+2. Install dependencies:  
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Start the application:  
+    ```bash
+    python -m src.main
+    ```
