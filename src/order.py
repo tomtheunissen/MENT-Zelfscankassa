@@ -85,7 +85,7 @@ def save_order(items: List[Dict], totaal: float, co2_text: str | None = None) ->
     if not items:
         return None
     created_at = _dt.datetime.now().isoformat(timespec="seconds")
-    # Expand items into repeated names
+    
     expanded_items = []
     for item in items:
         naam = item.get("naam")

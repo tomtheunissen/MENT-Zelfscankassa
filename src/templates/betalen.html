@@ -1,116 +1,149 @@
 <!DOCTYPE html>
+<html class="light" lang="en">
+  <head>
+    <!-- Standaard meta tags voor encoding en responsive gedrag -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<html class="light" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Bevestiging</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700&amp;display=swap" rel="stylesheet"/>
-<script>
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            "primary": "#0077B6",
-            "background-light": "#E9ECEF",
-            "background-dark": "#101a22",
-            "success": "#4CAF50",
-            "text-light": "#212529",
-            "text-dark": "#F8F9FA",
-          },
-          fontFamily: {
-            "display": ["Public Sans", "sans-serif"]
-          },
-          borderRadius: {
-            "DEFAULT": "0.5rem",
-            "lg": "0.75rem",
-            "xl": "1rem",
-            "full": "9999px"
+    <!-- Titel voor het browsertabblad -->
+    <title>Bevestiging</title>
+
+    <!-- Tailwind via CDN + Material Symbols + Public Sans font -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700&display=swap" />
+
+    <!-- Tailwind theme extensies: merkkleuren en typografie -->
+    <script>
+      tailwind.config = {
+        darkMode: 'class', // schakelt dark-mode op body via class
+        theme: {
+          extend: {
+            colors: {
+              primary: '#0077B6',          // primair blauw voor accentknoppen
+              'background-light': '#E9ECEF',
+              'background-dark': '#101a22',
+              success: '#4CAF50',           // groen voor checkmark-cirkel
+              'text-light': '#212529',
+              'text-dark': '#F8F9FA',
+            },
+            fontFamily: {
+              display: ['Public Sans', 'sans-serif'],
+            },
+            borderRadius: {
+              DEFAULT: '0.5rem',
+              lg: '0.75rem',
+              xl: '1rem',
+              full: '9999px',
+            },
           },
         },
-      },
-    }
-  </script>
-<style>
-    .material-symbols-outlined {
-      font-variation-settings:
-      'FILL' 1,
-      'wght' 400,
-      'GRAD' 0,
-      'opsz' 48
-    }
-  </style>
-</head>
-<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
-<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
-    <header class="flex justify-between items-center p-6 bg-white dark:bg-gray-800 shadow-md">
-        <img class="h-8" data-alt="Zuyd Hogeschool logo" src="{{ url_for('static', filename='img/ui/zuyd_logo.png') }}"/>
-        <div class="text-lg font-semibold">
-            <span id="time"></span>
-        </div>
-    </header>
-    <main class="flex flex-1 justify-center items-center py-10">
-        <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
-            <div class="flex flex-col items-center">
-                <div class="w-20 h-20 bg-success rounded-full flex items-center justify-center mb-6">
-                    <span class="material-symbols-outlined text-white text-5xl">check</span>
-                </div>
-                <h1 class="text-text-light dark:text-text-dark text-4xl font-bold leading-tight mb-2 text-center">Betaling succesvol!</h1>
-                <p class="text-gray-500 dark:text-gray-400 text-lg font-normal leading-normal mb-8 text-center">Bedankt voor uw aankoop.</p>
-                <div class="w-full bg-background-light dark:bg-background-dark rounded-lg p-6 mb-8">
-                    <div class="flex justify-between items-center mb-4">
-                        <p class="text-gray-500 dark:text-gray-400 text-base font-normal flex items-center gap-2">
-                          Milieu impact:
-                        </p>
-                        <div class="flex items-center gap-2">
-                            <p class="text-text-light dark:text-text-dark text-base font-medium">
-                              {{ '%.1f'|format((km_equiv|default(0)|float)) }} km
-                            </p>
-                            <span class="material-symbols-outlined text-green-600">eco</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-center mb-4">
-                      <p class="text-gray-500 dark:text-gray-400 text-base font-normal">Betaalmiddel:</p>
-                        <div class="flex items-center gap-2">
-                          <p class="text-text-light dark:text-text-dark text-base font-medium">Betaalpas</p>
-                          <span class="material-symbols-outlined text-gray-700">credit_card</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-center">
-                      <p class="text-gray-500 dark:text-gray-400 text-base font-normal">Totaalbedrag:</p>
-                      <p class="text-text-light dark:text-text-dark text-2xl font-bold">€{{ '%.2f'|format(totaal) }}</p>
-                    </div>
-                </div>
-                <div class="flex flex-col gap-4 w-full">
-                    <form method="post" action="{{ url_for('reset') }}">
-                      <button type="submit" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 px-5 bg-[#E81A32] text-white text-lg font-bold leading-normal tracking-[0.015em] w-full">
-                        <span class="truncate">Klaar</span>
-                      </button>
-                    </form>
-                    <button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 px-5 bg-background-light dark:bg-gray-700 text-text-light dark:text-text-dark text-lg font-bold leading-normal tracking-[0.015em] w-full">
-                        <span class="truncate">Bonnetje afdrukken</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </main>
-</div>
-<script>
-    function updateTime() {
-      const timeElement = document.getElementById('time');
-      if (timeElement) {
-        const now = new Date();
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        timeElement.textContent = `${hours}:${minutes}`;
+      };
+    </script>
+
+    <!-- Materiaal-iconen in gevulde stijl voor duidelijke pictogrammen -->
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          'FILL' 1,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 48;
       }
-    }
-    updateTime();
-    setInterval(updateTime, 1000);
-  </script>
-</body>
+    </style>
+  </head>
+
+  <body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+    <!-- Pagina-opbouw: header met logo en klok, main met bevestigingskaart -->
+    <div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+      <!-- Header toont logo links en een live-klok rechts -->
+      <header class="flex justify-between items-center p-6 bg-white dark:bg-gray-800 shadow-md">
+        <!-- Logo komt uit de Flask static map via url_for zodat het pad klopt in alle omgevingen -->
+        <img class="h-8" src="{{ url_for('static', filename='img/ui/zuyd_logo.png') }}" data-alt="Zuyd Hogeschool logo" />
+        <div class="text-lg font-semibold">
+          <span id="time"></span> <!-- Klok wordt met JS elke seconde bijgewerkt -->
+        </div>
+      </header>
+
+      <!-- Main center: kaart met succesmelding, milieu-indicator en knoppen -->
+      <main class="flex flex-1 justify-center items-center py-10">
+        <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+          <div class="flex flex-col items-center">
+            <!-- Succes-icoon in een groene cirkel -->
+            <div class="w-20 h-20 bg-success rounded-full flex items-center justify-center mb-6">
+              <span class="material-symbols-outlined text-white text-5xl">check</span>
+            </div>
+
+            <!-- Titel en subtitel -->
+            <h1 class="text-text-light dark:text-text-dark text-4xl font-bold leading-tight mb-2 text-center">Betaling succesvol!</h1>
+            <p class="text-gray-500 dark:text-gray-400 text-lg font-normal leading-normal mb-8 text-center">Bedankt voor uw aankoop.</p>
+
+            <!-- Informatiekaart met milieu-impact, betaalmiddel en totaalbedrag -->
+            <div class="w-full bg-background-light dark:bg-background-dark rounded-lg p-6 mb-8">
+              <!-- Milieu-impact: toont de omrekening naar autokilometers -->
+              <div class="flex justify-between items-center mb-4">
+                <p class="text-gray-500 dark:text-gray-400 text-base font-normal flex items-center gap-2">
+                  Milieu impact:
+                </p>
+                <div class="flex items-center gap-2">
+                  <!-- km_equiv komt uit Flask context en wordt veilig geformatteerd naar 1 decimaal -->
+                  <p class="text-text-light dark:text-text-dark text-base font-medium">
+                    {{ '%.1f'|format((km_equiv|default(0)|float)) }} km
+                  </p>
+                  <span class="material-symbols-outlined text-green-600">eco</span>
+                </div>
+              </div>
+
+              <!-- Betaalmiddel: statisch weergegeven, kan later dynamisch worden -->
+              <div class="flex justify-between items-center mb-4">
+                <p class="text-gray-500 dark:text-gray-400 text-base font-normal">Betaalmiddel:</p>
+                <div class="flex items-center gap-2">
+                  <p class="text-text-light dark:text-text-dark text-base font-medium">Betaalpas</p>
+                  <span class="material-symbols-outlined text-gray-700">credit_card</span>
+                </div>
+              </div>
+
+              <!-- Totaalbedrag: uit Flask variabele `totaal`, op 2 decimalen -->
+              <div class="flex justify-between items-center">
+                <p class="text-gray-500 dark:text-gray-400 text-base font-normal">Totaalbedrag:</p>
+                <p class="text-text-light dark:text-text-dark text-2xl font-bold">€{{ '%.2f'|format(totaal) }}</p>
+              </div>
+            </div>
+
+            <!-- Actieknoppen: klaar (POST naar reset) en bonnetje -->
+            <div class="flex flex-col gap-4 w-full">
+              <!-- De 'Klaar' knop post naar de `reset` route zodat de sessie wordt gewist en we terugkeren naar het beginscherm -->
+              <form method="post" action="{{ url_for('reset') }}">
+                <button type="submit" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 px-5 bg-[#E81A32] text-white text-lg font-bold leading-normal tracking-[0.015em] w-full">
+                  <span class="truncate">Klaar</span>
+                </button>
+              </form>
+
+              <!-- Placeholder voor bon-afdrukken. Deze knop doet nu niets en kan later gekoppeld worden aan een print- of PDF-flow -->
+              <button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 px-5 bg-background-light dark:bg-gray-700 text-text-light dark:text-text-dark text-lg font-bold leading-normal tracking-[0.015em] w-full">
+                <span class="truncate">Bonnetje afdrukken</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Eenvoudige klok die HH:MM toont en elke seconde wordt ververst -->
+    <script>
+      function updateTime() {
+        const timeElement = document.getElementById('time');
+        if (timeElement) {
+          const now = new Date();
+          const hours = String(now.getHours()).padStart(2, '0');
+          const minutes = String(now.getMinutes()).padStart(2, '0');
+          timeElement.textContent = `${hours}:${minutes}`;
+        }
+      }
+      updateTime();
+      setInterval(updateTime, 1000);
+    </script>
+  </body>
 </html>

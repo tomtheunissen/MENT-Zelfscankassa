@@ -1,73 +1,98 @@
 <!DOCTYPE html>
-<html class="light" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Zuyd Cafeteria Self-Checkout</title>
-<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script>
+<html class="light" lang="en">
+  <head>
+    <!-- Standaard meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Titel voor het browsertabblad -->
+    <title>Zuyd Cafeteria Self-Checkout</title>
+
+    <!-- Fonts en iconen -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700;900&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+
+    <!-- Tailwind via CDN met forms + container-queries voor consistente UI -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <!-- Tailwind config: merk-kleuren en typografie -->
+    <script>
       tailwind.config = {
-        darkMode: "class",
+        darkMode: 'class',
         theme: {
           extend: {
             colors: {
-              primary: "#E81A32",
-              "background-light": "#FFFFFF",
-              "background-dark": "#101a22",
-              "text-primary": "#000000",
+              primary: '#E81A32',            // Zuyd accentkleur
+              'background-light': '#FFFFFF',
+              'background-dark': '#101a22',
+              'text-primary': '#000000',
             },
             fontFamily: {
-              display: ["Public Sans"],
+              display: ['Public Sans'],
             },
             borderRadius: {
-              DEFAULT: "0.25rem",
-              lg: "0.5rem",
-              xl: "0.75rem",
-              full: "9999px",
+              DEFAULT: '0.25rem',
+              lg: '0.5rem',
+              xl: '0.75rem',
+              full: '9999px',
             },
           },
         },
       };
     </script>
-<style>
+
+    <!-- Iconen styling -->
+    <style>
       .material-symbols-outlined {
-        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
       }
     </style>
-</head>
+  </head>
 
-<body class="bg-background-light dark:bg-background-dark font-display text-text-primary dark:text-gray-200">
-  </header>
-  <div class="relative flex min-h-screen flex-col group/design-root overflow-x-hidden">
-    <div class="layout-container flex h-full grow flex-col">
-      <div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-5">
-        <div class="layout-content-container flex flex-col max-w-[960px] flex-1 justify-between">
-          <header class="flex justify-center pt-32 pb-4">
-            <div class="w-full max-w-sm h-auto">
-              <img alt="Zuyd Hogeschool Logo" class="w-full h-auto translate-y-6 md:translate-y-8" src="{{ url_for('static', filename='img/ui/zuyd_logo.png')}}"/>
-            </div>
-          </header>
-          <main class="flex flex-col items-center text-center">
-            <div class="flex flex-col gap-6 p-4 items-center">
-              <div class="flex flex-col gap-3">
-                <p class="text-5xl lg:text-6xl font-black leading-tight tracking-[-0.033em] text-text-primary dark:text-white">Zuyd Hogeschool</p>
-                <p class="text-lg lg:text-xl font-normal leading-normal text-text-primary/70 dark:text-gray-400">Zuyd. Het begint met jou!</p>
+  <body class="bg-background-light dark:bg-background-dark font-display text-text-primary dark:text-gray-200">
+    <!-- De header-tag is hier niet gebruikt; hoofdstructuur start met de root container -->
+    <div class="relative flex min-h-screen flex-col group/design-root overflow-x-hidden">
+      <div class="layout-container flex h-full grow flex-col">
+        <!-- Centrale kolom: logo, titel/subtitel en startknop -->
+        <div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col max-w-[960px] flex-1 justify-between">
+            <!-- Headerblok met het Zuyd logo, iets naar beneden vertaald voor betere visuele balans -->
+            <header class="flex justify-center pt-32 pb-4">
+              <div class="w-full max-w-sm h-auto">
+                <img
+                  alt="Zuyd Hogeschool Logo"
+                  class="w-full h-auto translate-y-6 md:translate-y-8"
+                  src="{{ url_for('static', filename='img/ui/zuyd_logo.png') }}"
+                />
               </div>
-              <div class="flex px-4 py-3 justify-center mt-6">
-                <a href="/kassa">
-                  <button class="flex min-w-[120px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-16 px-8 bg-primary text-white text-2xl font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 active:bg-primary/80 transition-colors">
-                    <span class="truncate">Start</span>
-                  </button>
-                </a>
+            </header>
+
+            <!-- Hoofdinhoud: grote titel, subtitel en call-to-action knop -->
+            <main class="flex flex-col items-center text-center">
+              <div class="flex flex-col gap-6 p-4 items-center">
+                <div class="flex flex-col gap-3">
+                  <p class="text-5xl lg:text-6xl font-black leading-tight tracking-[-0.033em] text-text-primary dark:text-white">Zuyd Hogeschool</p>
+                  <p class="text-lg lg:text-xl font-normal leading-normal text-text-primary/70 dark:text-gray-400">Zuyd. Het begint met jou!</p>
+                </div>
+
+                <!-- De startknop linkt naar de kassa-ervaring. De <a> zorgt voor navigatie, de <button> voor styling en focusgedrag -->
+                <div class="flex px-4 py-3 justify-center mt-6">
+                  <a href="/kassa">
+                    <button class="flex min-w-[120px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-16 px-8 bg-primary text-white text-2xl font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 active:bg-primary/80 transition-colors">
+                      <span class="truncate">Start</span>
+                    </button>
+                  </a>
+                </div>
               </div>
-            </div>
-          </main> 
-          <footer class="flex flex-col gap-6 px-5 py-10 text-center">
-            <p class="text-text-primary/70 dark:text-gray-500 text-base font-normal leading-normal">© 2025 Zuyd Hogeschool</p>
-          </footer>
+            </main>
+
+            <!-- Footer met auteursrechtvermelding -->
+            <footer class="flex flex-col gap-6 px-5 py-10 text-center">
+              <p class="text-text-primary/70 dark:text-gray-500 text-base font-normal leading-normal">© 2025 Zuyd Hogeschool</p>
+            </footer>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</body></html>
+  </body>
+</html>

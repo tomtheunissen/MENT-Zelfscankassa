@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries,line-clamp"></script>
 <script>
       tailwind.config = {
         darkMode: "class",
@@ -32,9 +32,8 @@
 
 <body class="bg-background-light dark:bg-background-dark font-display text-[#111518] dark:text-white">
 <div class="flex h-screen">
-<!-- Left Side: Item Selection -->
+<!-- Titel en ondertitel linksbovenin -->
   <div class="flex flex-col w-3/5 bg-white dark:bg-background-dark p-6">
-    <!-- Header -->
       <div class="flex items-center gap-3 mb-6">
         <div class="bg-center bg-no-repeat aspect-square bg-cover size-12 logo" data-alt="Zuyd Hogeschool Logo"></div>
           <div>
@@ -43,7 +42,7 @@
             </p>
           </div>
       </div>
-    <!-- Category Navigation -->
+    <!-- Navigatie bij de 4 voedselcategorien -->
 
     <div class="tabs flex border-b border-gray-200 dark:border-gray-700 mb-4">
       <button class="tab active flex items-center gap-2 px-4 py-3 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors" onclick="openTab('broodjes')">
@@ -67,6 +66,7 @@
       </button>
     </div>
 
+<!-- Het opstellen van de tegels voor de te scannen producten uit de lijst 'broodjes'-->
 <div id="broodjes" class="tab-content overflow-y-auto">
   <div class="flex-grow overflow-y-auto pr-2">
     <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
@@ -76,6 +76,7 @@
             <img class="w-full aspect-square object-cover rounded-lg"
                  src="{{ url_for('static', filename=(p.afbeelding_url|default('', true)|replace('src/static/','')) ) }}"
                  alt="{{ p.naam }}">
+            <!-- Maken van de blaadjes op basis van eco score en deze van kleur veranderen afhankelijk van de hoeveelheid-->
             {% set score = (p.eco_score or 0) | int %}
             {% set color = 'text-red-600' %}
             {% if score == 2 %}{% set color = 'text-orange-500' %}
@@ -90,7 +91,7 @@
               {% endfor %}
             </div>
             <div>
-              <p class="text-base font-medium text-gray-800 dark:text-white">{{ p.naam }}</p>
+              <p class="text-base font-medium text-gray-800 dark:text-white leading-snug min-h-[3rem] line-clamp-2">{{ p.naam }}</p>
               <p class="text-sm text-gray-500 dark:text-gray-400">€{{ '%.2f'|format(p.prijs) }}</p>
             </div>
           </div>
@@ -100,6 +101,7 @@
   </div>
 </div>
 
+<!-- Het opstellen van de tegels voor de te scannen producten uit de lijst 'dranken' -->
 <div id="dranken" class="tab-content hidden overflow-y-auto">
   <div class="flex-grow overflow-y-auto pr-2">
     <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
@@ -109,6 +111,7 @@
             <img class="w-full aspect-square object-cover rounded-lg"
                  src="{{ url_for('static', filename=(p.afbeelding_url|default('', true)|replace('src/static/','')) ) }}"
                  alt="{{ p.naam }}">
+            <!-- Maken van de blaadjes op basis van eco score en deze van kleur veranderen afhankelijk van de hoeveelheid-->
             {% set score = (p.eco_score or 0) | int %}
             {% set color = 'text-red-600' %}
             {% if score == 2 %}{% set color = 'text-orange-500' %}
@@ -123,7 +126,7 @@
               {% endfor %}
             </div>
             <div>
-              <p class="text-base font-medium text-gray-800 dark:text-white">{{ p.naam }}</p>
+              <p class="text-base font-medium text-gray-800 dark:text-white leading-snug min-h-[3rem] line-clamp-2">{{ p.naam }}</p>
               <p class="text-sm text-gray-500 dark:text-gray-400">€{{ '%.2f'|format(p.prijs) }}</p>
             </div>
           </div>
@@ -133,6 +136,7 @@
   </div>
 </div>
 
+<!-- Het opstellen van de tegels voor de te scannne producten uit de lijst 'snacks' -->
 <div id="snacks" class="tab-content hidden overflow-y-auto">
   <div class="flex-grow overflow-y-auto pr-2">
     <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
@@ -142,6 +146,7 @@
             <img class="w-full aspect-square object-cover rounded-lg"
                  src="{{ url_for('static', filename=(p.afbeelding_url|default('', true)|replace('src/static/','')) ) }}"
                  alt="{{ p.naam }}">
+            <!-- Maken van de blaadjes op basis van eco score en deze van kleur veranderen afhankelijk van de hoeveelheid-->
             {% set score = (p.eco_score or 0) | int %}
             {% set color = 'text-red-600' %}
             {% if score == 2 %}{% set color = 'text-orange-500' %}
@@ -156,7 +161,7 @@
               {% endfor %}
             </div>
             <div>
-              <p class="text-base font-medium text-gray-800 dark:text-white">{{ p.naam }}</p>
+              <p class="text-base font-medium text-gray-800 dark:text-white leading-snug min-h-[3rem] line-clamp-2">{{ p.naam }}</p>
               <p class="text-sm text-gray-500 dark:text-gray-400">€{{ '%.2f'|format(p.prijs) }}</p>
             </div>
           </div>
@@ -166,6 +171,7 @@
   </div>
 </div>
 
+<!-- Het opstellen van de tegels voor de te scannen producten uit de lijst 'overige' -->
 <div id="other" class="tab-content hidden overflow-y-auto">
   <div class="flex-grow overflow-y-auto pr-2">
     <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
@@ -175,6 +181,7 @@
             <img class="w-full aspect-square object-cover rounded-lg"
                  src="{{ url_for('static', filename=(p.afbeelding_url|default('', true)|replace('src/static/','')) ) }}"
                  alt="{{ p.naam }}">
+            <!-- Maken van de blaadjes op basis van eco score en deze van kleur veranderen afhankelijk van de hoeveelheid-->
             {% set score = (p.eco_score or 0) | int %}
             {% set color = 'text-red-600' %}
             {% if score == 2 %}{% set color = 'text-orange-500' %}
@@ -189,7 +196,7 @@
               {% endfor %}
             </div>
             <div>
-              <p class="text-base font-medium text-gray-800 dark:text-white">{{ p.naam }}</p>
+              <p class="text-base font-medium text-gray-800 dark:text-white leading-snug min-h-[3rem] line-clamp-2">{{ p.naam }}</p>
               <p class="text-sm text-gray-500 dark:text-gray-400">€{{ '%.2f'|format(p.prijs) }}</p>
             </div>
           </div>
@@ -210,7 +217,7 @@
   </div>
 
 
-  <!-- Right Side: Cart Summary -->
+  <!-- Rechterkant: Winkelwagen -->
   <div class="cart flex flex-col w-2/5 bg-background-light dark:bg-zinc-800 p-6">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Winkelwagen</h2>
@@ -218,9 +225,11 @@
         <button class="knop-afbreken" href="{{ url_for('reset') }}">Afbreken</button>
       </form>
     </div>
+    <!-- Voor elk product in de lijst met gescande items maak in de winkelwagen een kaart aan met al deze elementen -->
     <div id="cart-scroll" class="flex-grow overflow-y-auto space-y-4 pr-2" style="scroll-behavior: smooth;">
         <ul class="space-y-4">
           {% for p in producten %}
+          <!-- Naam en prijs van elk gescand product -->
             <li data-key="{{ p.key }}" class="lijst-gescand">
               <div class="flex items-center gap-4 bg-white dark:bg-zinc-900 p-3 rounded-lg">
                 <img class="aspect-square object-cover rounded-lg size-16"
@@ -230,16 +239,20 @@
                   <p class="text-base font-medium text-gray-800 dark:text-white">{{ p.naam }}</p>
                   <p class="text-sm text-gray-500 dark:text-gray-400">€{{ '%.2f'|format(p.subtotaal) }}</p>
                 </div>
+                <!-- Plus knop in kaart gescand -->
                 <div class="line-actions flex items-center gap-2 text-gray-800 dark:text-white">
                   <form hx-post="{{ url_for('minus') }}" hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" class="inline">
                     <input type="hidden" name="code" value="{{ p.key }}" />
                     <button type="submit" class="btn-icon minus text-lg font-medium flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600">-</button>
                   </form>
+                  <!-- Tekst met aantal van een gescand product -->
                   <p class="text-base font-medium w-10 p-0 text-center bg-transparent tabular-nums"> {{ p.aantal }} </p>
-                    <form hx-post="{{ url_for('plus') }}" hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" class="inline">
+                  <!-- Min knop in kaart gescand -->
+                  <form hx-post="{{ url_for('plus') }}" hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" class="inline">
                     <input type="hidden" name="code" value="{{ p.key }}" />
                     <button type="submit" class="btn-icon plus text-lg font-medium flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-zinc-600">+</button>
                   </form>
+                <!-- Knop om alle van een product te verwijderen -->
                 </div>
                   <form hx-post="{{ url_for('delete') }}" hx-target=".cart" hx-swap="outerHTML" hx-select=".cart" class="inline">
                   <input type="hidden" name="code" value="{{ p.key }}" />
@@ -254,11 +267,11 @@
             <li></li>
           {% endif %}
         </ul>
-      <!-- Cart Item -->
     </div>
-    <!-- Price Summary & Actions -->
+    <!-- Prijs saemenvatting en acties-->
     <div class="mt-auto pt-6 border-t border-gray-200 dark:border-gray-700">
       <div class="my-4 text-center">
+        <!-- Totaalbedrag en uitstoot in kilometers -->
         <div class="flex items-center justify-center gap-2 text-green-600">
           <span class="material-symbols-outlined">eco</span>
           <p class="text-lg font-semibold">
@@ -272,6 +285,7 @@
           <p class="total">Totaal: €{{ '%.2f'|format(totaal) }}</p>
         </div>
       </div>
+      <!-- Betalen knop, als winkelmand leeg is, wordt de knop grijs en is dan niet clickable -->
       <div class="mt-6 flex flex-col gap-4">
         {% set cart_empty = (not producten) %}
         <button
@@ -282,6 +296,7 @@
           Betalen
         </button>
 
+        <!-- Knop om medewerker te roepen, voor nu geen functionaliteit-->
         <button class="w-full flex items-center justify-center rounded-lg h-12 px-6 bg-gray-200 dark:bg-zinc-700 text-gray-800 dark:text-white text-base font-bold hover:bg-gray-300 dark:hover:bg-zinc-600 transition-colors">
           Medewerker
         </button>
@@ -304,7 +319,7 @@
     }
   }
 
-  // Bewaar positie t.o.v. onderkant vóór swap, herstel na swap
+  // Bewaar positie t.o.v. onderkant voor swap, herstel na swap
   let __cartOffsetFromBottom = null;
   let __cartWasPinned = false;
 
@@ -327,7 +342,7 @@
         scroller.scrollTop = Math.max(0, scroller.scrollHeight - __cartOffsetFromBottom);
       }
       scroller.style.scrollBehavior = '';
-      // Als je vóór de swap al onderaan was, tik dan soepel naar volledig onderaan
+      // Als je voor de swap al onderaan was, tik dan soepel naar volledig onderaan
       if (__cartWasPinned) {
         scroller.scrollTo({ top: scroller.scrollHeight, behavior: 'smooth' });
       }
@@ -336,21 +351,34 @@
     }
   });
 
+  // Na elke HTMX-swap (DOM-vervanging) kunnen we de cart eventueel nog een zetje naar beneden geven
   document.body.addEventListener('htmx:afterSwap', (e) => {
+    // Filter: alleen reageren wanneer het doel van de swap het .cart-paneel is
     if (e.detail && e.detail.target && e.detail.target.matches('.cart')) {
-      const path = e.detail.requestConfig && e.detail.requestConfig.path || '';
+      // Bepaal het pad van de uitgevoerde HTMX-request (bijv. "/scan" of "/plus").
+      // Als er geen config is, val terug op een lege string om errors te voorkomen
+      const path = (e.detail.requestConfig && e.detail.requestConfig.path) || '';
+      // Detecteer specifieke acties die de cart uitbreiden
       const isScan = path.includes('/scan');
       const isPlus = path.includes('/plus');
+      // Als de gebruiker vóór de swap onderaan stond en de actie is een scan of plus,
+      // dan scrollen we smooth terug naar de onderkant zodat de nieuwste regel in beeld blijft
       if (__cartWasPinned && (isScan || isPlus)) {
         scrollCartToBottom();
       }
     }
   });
+
+  // afterSettle vuurt nadat HTMX de DOM heeft geüpdatet en alles gerenderd is
+  // Dit is een extra vangnet om te zorgen dat we ook na late layout-changes netjes onderaan eindigen
   document.body.addEventListener('htmx:afterSettle', (e) => {
+    // Wederom: alleen handelen voor updates aan het .cart-paneel
     if (e.detail && e.detail.target && e.detail.target.matches('.cart')) {
-      const path = e.detail.requestConfig && e.detail.requestConfig.path || '';
+      // Hetzelfde pad bepalen als hierboven, met veilige fallback
+      const path = (e.detail.requestConfig && e.detail.requestConfig.path) || '';
       const isScan = path.includes('/scan');
       const isPlus = path.includes('/plus');
+      // Alleen een nudge als de gebruiker al aan de onderkant stond én het om scan/plus ging
       if (__cartWasPinned && (isScan || isPlus)) {
         scrollCartToBottom();
       }
